@@ -1,267 +1,80 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Customer Service</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: rgba(111, 143, 70, 1);
-        }
+@extends('CS.dashboard')
 
-        body {
-            background-color: #f5f8f2;
-            font-family: 'Segoe UI', sans-serif;
-        }
+@section('isi')
 
-        h2 {
-            color: var(--primary-color);
-            font-weight: 700;
-        }
-
-        .btn-success {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .btn-success:hover {
-            background-color: #5c7e3e;
-            border-color: #5c7e3e;
-        }
-
-        .table thead {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .badge.bg-success {
-            background-color: var(--primary-color) !important;
-        }
-
-        .modal-header {
-            background-color: #e7f0da;
-        }
-
-        .modal-title {
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-
-        .btn-outline-primary {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .btn-outline-primary:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .user-info {
-            font-size: 14px;
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-
-    </style>
-</head>
-<body>
-
-<div class="container py-5">
-    <h2 class="mb-4">Dashboard Customer Service</h2>
-
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="user-info">
-            <strong>Masuk sebagai:</strong> {{ Auth::user()->nama_pegawai }}
+<div class="container-fluid px-0">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h4 class="fw-bold mb-1" style="color: var(--brand-dark);">Dashboard Customer Service</h4>
+            <p class="text-muted small mb-0">Kelola komunikasi dan data penitip ReUseMart</p>
         </div>
         <div>
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button class="btn btn-outline-danger" type="submit">Logout</button>
-            </form>
+            <a href="{{ route('cs.penitip.index') }}" class="btn btn-brand">
+                <i class="bi bi-people me-1"></i> Buka Manajemen Penitip
+            </a>
         </div>
     </div>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <form action="{{ route('cs.penitip.index') }}" method="GET" class="d-flex" style="gap: 10px;">
-            <input type="text" name="q" class="form-control" placeholder="Cari Data Penitip" value="{{ $search }}">
-            <button class="btn btn-outline-primary" type="submit">Cari</button>
-        </form>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">+ Tambah Penitip</button>
-    </div>
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+            <div>{{ session('success') }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-    <div class="table-responsive">
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>No KTP</th>
-                    <th>Email</th>
-                    <th>Username</th>
-                    <th>Status</th>
-                    <th>Foto KTP</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($penitips as $index => $penitip)
-                    <tr>
-                        <td>{{ $penitips->firstItem() + $index }}</td>
-                        <td>{{ $penitip->nama_penitip }}</td>
-                        <td>{{ $penitip->no_ktp }}</td>
-                        <td>{{ $penitip->email }}</td>
-                        <td>{{ $penitip->username }}</td>
-                        <td>
-                            <span class="badge {{ $penitip->status_aktif ? 'bg-success' : 'bg-secondary' }}">
-                                {{ $penitip->status_aktif ? 'Aktif' : 'Tidak Aktif' }}
-                            </span>
-                        </td>
-                        <td>
-                            @if($penitip->foto_ktp)
-                                <a href="{{ asset('storage/' . $penitip->foto_ktp) }}" target="_blank">Lihat</a>
-                            @else
-                                <span class="text-muted">Tidak ada</span>
-                            @endif
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{ $penitip->id_penitip }}">Edit</button>
-
-                            <div class="modal fade" id="editModal{{ $penitip->id_penitip }}" tabindex="-1" aria-labelledby="editModalLabel{{ $penitip->id_penitip }}" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <form action="{{ route('cs.penitip.update', $penitip->id_penitip) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateFormUpdate();">
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="editModalLabel{{ $penitip->id_penitip }}">Edit Penitip</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Nama Penitip</label>
-                                                    <input type="text" name="nama_penitip" class="form-control" value="{{ $penitip->nama_penitip }}" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">No KTP</label>
-                                                    <input type="text" name="no_ktp" class="form-control" value="{{ $penitip->no_ktp }}" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Email</label>
-                                                    <input type="email" name="email" class="form-control" value="{{ $penitip->email }}" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Username</label>
-                                                    <input type="text" name="username" class="form-control" value="{{ $penitip->username }}" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Foto KTP</label>
-                                                    <input type="file" name="foto_ktp" class="form-control">
-                                                    @if($penitip->foto_ktp)
-                                                        <small>File lama: <a href="{{ asset('storage/' . $penitip->foto_ktp) }}" target="_blank">Lihat</a></small>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                <button type="submit" class="btn btn-primary">Simpan</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <form action="{{ route('cs.penitip.destroy', $penitip->id_penitip) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-sm btn-danger">Hapus</button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="8" class="text-center">Data penitip tidak ditemukan.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    <div class="d-flex justify-content-center mt-4">
-        {!! $penitips->withQueryString()->links('pagination::bootstrap-5') !!}
-    </div>
-
-    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form action="{{ route('cs.penitip.store') }}" method="POST" enctype="multipart/form-data" class="modal-content" onsubmit="return validateFormAdd();">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createModalLabel">Tambah Penitip</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Nama Penitip</label>
-                        <input type="text" name="nama_penitip" class="form-control" required>
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card stat-card border-0 shadow-sm p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small fw-semibold">Pusat Diskusi</div>
+                        <h4 class="fw-bold mb-0 mt-2" style="color: var(--brand-dark);">Tanya Jawab</h4>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">No KTP</label>
-                        <input type="text" name="no_ktp" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Alamat</label>
-                        <textarea name="alamat" class="form-control" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <input type="text" name="username" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Foto KTP</label>
-                        <input type="file" name="foto_ktp" class="form-control">
+                    <div class="stat-icon-wrapper rounded-circle p-3" style="background: rgba(111,143,70,0.1); color: var(--brand-primary);">
+                        <i class="bi bi-chat-dots-fill fs-3"></i>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                <div class="mt-3">
+                    <a href="{{ route('diskusi.index') }}" class="btn btn-sm btn-outline-brand w-100">Buka Diskusi</a>
                 </div>
-            </form>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stat-card border-0 shadow-sm p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small fw-semibold">Verifikasi Pembayaran</div>
+                        <h4 class="fw-bold mb-0 mt-2" style="color: var(--brand-dark);">Bukti Transfer</h4>
+                    </div>
+                    <div class="stat-icon-wrapper rounded-circle p-3" style="background: rgba(14,165,233,0.1); color: #0284c7;">
+                        <i class="bi bi-credit-card-2-front-fill fs-3"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('cs.pembayaran.index') }}" class="btn btn-sm btn-outline-primary w-100">Verifikasi Pembayaran</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stat-card border-0 shadow-sm p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small fw-semibold">Penukaran Reward</div>
+                        <h4 class="fw-bold mb-0 mt-2" style="color: var(--brand-dark);">Merchandise</h4>
+                    </div>
+                    <div class="stat-icon-wrapper rounded-circle p-3" style="background: rgba(234,179,8,0.1); color: #ca8a04;">
+                        <i class="bi bi-gift-fill fs-3"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('cs.reward.index') }}" class="btn btn-sm btn-outline-warning w-100">Klaim Reward</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<script>
-function validateFormUpdate() {
-    return confirm('Yakin ingin mengubah data ini?');
-}
-</script>
-<script>
-function validateFormAdd() {
-    return confirm('Yakin ingin menambah data ini?');
-}
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+
+@endsection

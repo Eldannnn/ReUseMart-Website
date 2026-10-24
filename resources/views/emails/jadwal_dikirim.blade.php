@@ -5,7 +5,7 @@
     <title>Jadwal Dikirim</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #f7f7f7;
             margin: 0;
             padding: 20px;
@@ -48,7 +48,7 @@
             font-weight: 600;
         }
         .highlight {
-            color: #007bff;
+            color: #6f8f46;
             font-weight: bold;
         }
         .footer {

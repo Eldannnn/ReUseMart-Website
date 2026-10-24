@@ -1,107 +1,92 @@
 @extends('owner.dashboard')
 @section('isi')
-<div class="container py-4">
-    <h3 class="text-center mb-5"><strong>Laporan Komisi Bulanan per Produk</strong></h3>
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-    {{-- Filter bulan & tahun --}}
-    <form class="row g-2 mb-3" method="GET" action="{{ route('owner.laporan.komisi') }}">
-      <div class="col-auto">
-        <select name="month" class="form-select form-select-sm">
-            @foreach(range(1,12) as $m)
-                @php
-                    // gunakan createFromDate(YYYY, MM, 1)
-                    $name = \Carbon\Carbon::createFromDate($year, $m, 1)
-                            ->locale('id')
-                            ->isoFormat('MMMM');
-                @endphp
-                <option value="{{ $m }}" {{ request('month', date('n')) == $m ? 'selected' : '' }}>
-                    {{ ucfirst($name) }}
-                </option>
-            @endforeach
-        </select>
-      </div>
-      <div class="col-auto">
-        <input type="number" name="year" class="form-control form-control-sm" 
-               value="{{ request('year', date('Y')) }}" min="2000" max="2099">
-      </div>
-      <div class="col-auto">
-        <button class="btn btn-sm btn-success">Tampilkan</button>
-      </div>
-    </form>
-
-    
-        <!-- <div>
-            <p class="mb-0">
-                <strong>Bulan:</strong> {{ $monthName }} | <strong>Tahun:</strong> {{ $year }}
-                <strong>Tanggal Cetak:</strong> {{ $tanggalCetak }}</p>
-            </p>
-        </div> -->
+<div class="container-fluid px-2">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
         <div>
-            <a href="{{ route('owner.laporan.komisi.download', ['month' => request('month'), 'year' => request('year')]) }}"
-            class="btn btn-sm btn-danger">
-                <i class="bi bi-file-earmark-pdf"></i> Unduh PDF
+            <h3 class="fw-bold mb-1" style="color: var(--text-heading);">Laporan Komisi Bulanan per Produk</h3>
+            <p class="text-muted small mb-0">Rincian pembagian pendapatan komisi hunter, komisi platform ReUseMart, dan komisi penitip</p>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <form class="d-flex align-items-center gap-2" method="GET" action="{{ route('owner.laporan.komisi') }}" novalidate>
+                <select name="month" class="form-select" style="width: 140px;">
+                    @foreach(range(1,12) as $m)
+                        @php
+                            $name = \Carbon\Carbon::createFromDate($year, $m, 1)->locale('id')->isoFormat('MMMM');
+                        @endphp
+                        <option value="{{ $m }}" {{ request('month', date('n')) == $m ? 'selected' : '' }}>
+                            {{ ucfirst($name) }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <input type="number" name="year" class="form-control" style="width: 100px;" 
+                       value="{{ request('year', date('Y')) }}" min="2000" max="2099">
+
+                <button class="btn btn-outline-primary" type="submit">Filter</button>
+            </form>
+
+            <a href="{{ route('owner.laporan.komisi.download', ['month' => request('month'), 'year' => request('year')]) }}" class="btn btn-outline-danger">
+                <i class="bi bi-file-earmark-pdf me-1"></i> Unduh PDF
             </a>
         </div>
     </div>
 
-    <div class="table-responsive">
-      <table class="table table-bordered table-sm text-center" style="table-layout: fixed;">
-        <thead class="table-dark">
-          <tr>
-            <th>Kode Produk</th>
-            <th>Nama Produk</th>
-            <th>Harga Jual</th>
-            <th>Tanggal Masuk</th>
-            <th>Tanggal Laku</th>
-            <!-- <th>Komisi Kotor<br>(20% / 30%)</th> -->
-            <th>Komisi Hunter</th>
-            <th>Komisi ReUseMart</th>
-            <th>Komisi Penitip</th>
-            <th>Bonus Penitip</th>
-          </tr>
-        </thead>
-        <tbody>
-          @forelse($data as $row)
-            <tr>
-              <td class="text-center">{{ strtoupper(substr($row['nama'], 0, 1)) . $row['kode'] }}</td>
-              <td class="text-start">{{ $row['nama'] }}</td>
-              <td>{{ number_format($row['harga'],0,',','.') }}</td>
-              <td>{{ $row['tanggal_masuk'] }}</td>
-              <td>{{ $row['tanggal_laku'] }}</td>
-              <td>{{ number_format($row['komisi_hunter'],0,',','.') }}</td>
-              <td>{{ number_format($row['komisi_reuse'],0,',','.') }}</td>
-              <td>{{ number_format($row['komisi_penitip'],0,',','.') }}</td>
-              <td>{{ number_format($row['bonus_penitip'],0,',','.') }}</td>
-            </tr>
-          @empty
-            <tr><td colspan="8">Tidak ada penjualan di bulan ini.</td></tr>
-          @endforelse
-        </tbody>
-            <tfoot>
-                <tr class="fw-bold">
-                    {{-- Dua kolom pertama jadi label “Total” --}}
-                    <td colspan="2">Total</td>
-
-                    {{-- Total Harga Jual --}}
-                    <td>{{ number_format(collect($data)->sum('harga'), 0, ',', '.') }}</td>
-
-                    <td colspan="2" style="border-top: 1px solid #000; border-left: none; border-right: none;"></td>
-
-                    {{-- Total Komisi Hunter --}}
-                    <td>{{ number_format(collect($data)->sum('komisi_hunter'), 0, ',', '.') }}</td>
-
-                    {{-- Total Komisi ReUseMart --}}
-                    <td>{{ number_format(collect($data)->sum('komisi_reuse'), 0, ',', '.') }}</td>
-                    
-                    {{-- Total Komisi Penitip --}}
-                    <td>{{ number_format(collect($data)->sum('komisi_penitip'), 0, ',', '.') }}</td>
-
-                    {{-- Total Bonus Penitip --}}
-                    <td>{{ number_format(collect($data)->sum('bonus_penitip'), 0, ',', '.') }}</td>
-                </tr>
-            </tfoot>
-      </table>
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 text-center">
+                <thead>
+                    <tr>
+                        <th style="width: 110px;">Kode Produk</th>
+                        <th class="text-start">Nama Produk</th>
+                        <th class="text-end">Harga Jual</th>
+                        <th class="text-center" style="width: 110px;">Tgl Masuk</th>
+                        <th class="text-center" style="width: 110px;">Tgl Laku</th>
+                        <th class="text-end">Komisi Hunter</th>
+                        <th class="text-end">Komisi ReUseMart</th>
+                        <th class="text-end">Komisi Penitip</th>
+                        <th class="text-end">Bonus Penitip</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($data as $row)
+                        <tr>
+                            <td class="fw-semibold text-muted font-monospace">
+                                {{ strtoupper(substr($row['nama'], 0, 1)) . $row['kode'] }}
+                            </td>
+                            <td class="text-start fw-bold" style="color: var(--text-heading);">{{ $row['nama'] }}</td>
+                            <td class="text-end fw-semibold">Rp {{ number_format($row['harga'], 0, ',', '.') }}</td>
+                            <td class="text-muted small">{{ $row['tanggal_masuk'] }}</td>
+                            <td class="text-muted small">{{ $row['tanggal_laku'] }}</td>
+                            <td class="text-end text-muted">Rp {{ number_format($row['komisi_hunter'], 0, ',', '.') }}</td>
+                            <td class="text-end text-success fw-semibold">Rp {{ number_format($row['komisi_reuse'], 0, ',', '.') }}</td>
+                            <td class="text-end fw-semibold">Rp {{ number_format($row['komisi_penitip'], 0, ',', '.') }}</td>
+                            <td class="text-end text-warning fw-semibold">Rp {{ number_format($row['bonus_penitip'], 0, ',', '.') }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="9" class="py-5 text-center text-muted">
+                                <i class="bi bi-inbox fs-1 d-block mb-2 text-muted opacity-50"></i>
+                                Tidak ada transaksi penjualan di bulan ini.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+                @if(count($data))
+                <tfoot>
+                    <tr class="fw-bold bg-light">
+                        <td colspan="2" class="text-start">Total</td>
+                        <td class="text-end">Rp {{ number_format(collect($data)->sum('harga'), 0, ',', '.') }}</td>
+                        <td colspan="2"></td>
+                        <td class="text-end">Rp {{ number_format(collect($data)->sum('komisi_hunter'), 0, ',', '.') }}</td>
+                        <td class="text-end text-success">Rp {{ number_format(collect($data)->sum('komisi_reuse'), 0, ',', '.') }}</td>
+                        <td class="text-end">Rp {{ number_format(collect($data)->sum('komisi_penitip'), 0, ',', '.') }}</td>
+                        <td class="text-end text-warning">Rp {{ number_format(collect($data)->sum('bonus_penitip'), 0, ',', '.') }}</td>
+                    </tr>
+                </tfoot>
+                @endif
+            </table>
+        </div>
     </div>
 </div>
 @endsection

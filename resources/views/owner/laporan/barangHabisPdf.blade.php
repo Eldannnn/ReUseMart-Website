@@ -32,7 +32,7 @@
         <tbody>
             @forelse($laporan as $item)
                 <tr>
-                    <td class="text-center">{{ strtoupper(substr($item->nama_barang, 0, 1)) . $item->id_barang }}</td>
+                    <td class="text-center">{{ strtoupper(substr($item->nama_barang, 0, 1)) . $item->id_barang }}</td>
                     <td>{{ $item->nama_barang }}</td>
                     <td>{{ 'T' . $item->id_penitip }}</td>
                     <td>{{ optional($item->penitip)->nama_penitip ?? '-' }}</td>

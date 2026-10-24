@@ -2,577 +2,60 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Ruang Diskusi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruang Diskusi Produk - ReUseMart</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/reusemart-theme.css') }}">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            color: #333;
-            background-color: rgba(255, 255, 255, 0.8) !important;
-            backdrop-filter: saturate(150%) blur(30px);
-            z-index: 3;
-        }
-
-        .container {
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: nowrap; /* agar tidak melipat */
-        }
-
-        .logo {
-            margin-left: -40px;
-            background-color: rgba(111, 143, 70, 1); /* semi-transparan */
-            padding: 8px 12px;
-            border-radius: 50%;
-        }
-
-        header {
-            background-color: rgba(111, 143, 70, 1);
-            padding: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            height: 80px; /* atur tinggi navbar */
-            box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.1);
-        }
-
-        header .logo img {
-            height: 60px;
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2)); /* efek bayangan */
-            transition: transform 0.3s ease;
-            border-radius: 50%;
-        }
-
-        header .logo img:hover {
-            transform: scale(1.1); 
-            filter: drop-shadow(6px 6px 12px rgba(0, 0, 0, 0.3));
-            cursor: pointer;
-        }
-
-        nav ul {
-            display: flex;
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav ul li {
-            margin: 0 20px;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: white
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        .cart-search {
-            display: flex;
-            align-items: center;
-        }
-
-        .cart-search select,
-        .cart-search input[type="search"] {
-            width: 200px;
-            padding: 8px;
-            border-radius: 20px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-            outline: none;
-        }
-
-        .cart-search input[type="search"] {
-            width: 200px;
-        }
-
-        .cart-search a img {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-        }
-
-        .cart-search .icons {
-            display: flex;
-            align-items: center;
-        }
-
-        .cart-search .icons a {
-            margin-left: 15px;
-        }
-
-        .navbar-shadow-separator {
-            height: 1px;
-            background-color: #ccc;
-            box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.15);
-            margin-bottom: 5px;
-        }
-
-        #carouselExampleCaptions {
-            max-height: 500px;
-            overflow: hidden;
-        }
-
-        .carousel-item {
-            height: 400px;
-            position: relative;
-        }
-
-        .carousel-item img {
-            height: 100%;
-            width: 100%;
-            object-fit: cover;
-        }
-
-        .carousel-item a:hover img {
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
-            cursor: pointer; /* Menambahkan pointer saat hover */
-        }
-
-        .carousel-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 15px 30px;
-            background: rgba(0, 0, 0, 0.5); /* latar belakang transparan gelap */
-            color: white;
-            text-align: left;
-        }
-
-        .carousel-divider {
-            width: 80%;
-            height: 1px; /* tebal garis */
-            background-color: rgba(111, 143, 70, 1);; /* warna garis */
-            margin: 20px auto; /* jarak dari carousel */
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* bayangan untuk garis */
-        }
-
-        /* Judul Kategori */
-        .category-title {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .category-title h2 {
-            font-size: 28px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        /* Container untuk Kategori */
-        .category-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(85px, max-content));
-            gap: 10px;
-            justify-items: center;
-            margin-top: 20px;
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Setiap Kartu Kategori */
-        .category-card {
-            background-color: #f9f9f9;
-            padding: 8px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            height: 100px;
-            margin: 0;
-            text-decoration: none;
-        }
-
-        .category-card img {
-            width: 75%;
-            height: 65px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .category-card h3 {
-            margin-top: 5px;
-            margin: 2px 0 0 0;
-            font-size: 8px;
-            color: #333;
-            text-decoration: none;
-        }
-
-        .populer-produk{
-            text-align: left;
-            margin-top: 30px;
-            margin-left: 125px;
-        }
-
-        .populer-produk h2 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .product-container {
-            display: flex;  /* Menggunakan Flexbox */
-            justify-content: space-between;  /* Membuat produk bersebelahan dengan jarak yang sama */
-            gap: 10px;  /* Memberikan jarak antar produk */
-            margin-top: 5px;
-            flex-wrap: wrap;  /* Memastikan produk akan membungkus ke baris berikutnya jika ruang tidak cukup */
-            margin-left: 125px;
-            margin-right: 125px;
-        }
-
-        /* Kartu Produk */
-        .product-card {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            width: 200px;
-            text-align: center;
-            margin: 10px auto;
-            padding: 10px;
-            display: block;
-            text-decoration: none;
-            color: inherit;
-            border: 2px solid #f1f1f1;
-            width: calc(20% - 10px);
-            margin-bottom: 10px; 
-            height: 400px;
-        }
-
-        .product-card:hover {
-            transform: scale(1.05); /* Memperbesar produk sedikit saat hover */
-        }
-
-        /* Gambar Produk */
-        .product-image {
-            width: 100%;
-            height: 190px;
-            border-radius: 10px;
-            margin-top: 10px;
-            object-fit: cover;
-        }
-
-        .product-card img {
-            height: 170px;
-            width: 100%;
-            object-fit: contain;
-            margin-bottom: 10px;
-        }
-
-        /* Informasi Produk */
-        .product-info {
-            margin-top: 15px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        /* Nama Kategori Produk */
-        .product-category {
-            font-size: 10px;
-            color: #777;
-            text-align: left;
-        }
-
-        /* Nama Produk */
-        .product-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            margin: 10px 0;
-        }
-
-        /* Rating Produk */
-        .product-rating {
-            font-size: 10px;
-            color: #ff5a5f;
-        }
-
-        /* Nama Merek Produk */
-        .product-status {
-            font-size: 11px;
-            color: #777;
-            text-align: left;
-        }
-
-        .product-brand {
-            font-size: 11px;
-            color: #777;
-        }
-
-        /* Harga Produk */
-        .product-price {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-            width: 100%;
-        }
-
-        /* Harga Produk (Di kiri) */
-        .price-container {
-            flex: 1;
-            text-align: left;
-        }
-
-        .current-price {
-            font-size: 13px;
-            font-weight: bold;
-            color: #333;
-            flex-direction: column;
-        }
-
-        .add-to-cart-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Tombol Add to Cart */
-        .add-to-cart {
-            background-color: #F0FFF0;
-            color: #28a745;
-            padding: 5px 10px;
-            border: 2px solid #F0FFF0;;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            font-size: 11px;
-            cursor: pointer;
-        }
-
-        .add-to-cart img {
-            margin-right: 5px; /* Jarak antara ikon cart dan teks Add */
-            height: 18px;
-        }
-
-        .add-to-cart:hover {
-            background-color: #ACE1AF;
-        }
-
-        footer {
-            background-color: #f4f4f4;
-            padding: 10px 50px;  
-            border-top: 1px solid rgba(111, 143, 70, 1);;
-            font-size: 14px;
-        }
-
-        .footer-container {
-            display: flex;
-            justify-content: space-between;  /* Menempatkan elemen di kiri dan kanan */
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;  
-        }
-
-        .footer-left p {
-            margin: 0;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        /* Footer Middle - Social Icons */
-        .footer-middle {
-            display: flex;
-            justify-content: right;
-            flex: 1;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .social-icon img {
-            width: 21px;
-            height: 21px;
-            transition: transform 0.3s;
-        }
-
-        .social-icon:hover img {
-            transform: scale(1.2);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: row;
-                justify-content: space-between;
-            }
-
-            nav ul {
-                margin-top: 15px;
-                flex-direction: row;
-                align-items: center;
-                gap: 15px;
-            }
-
-            nav ul li {
-                margin: 5px 0;
-            }
-
-            .cart-search input[type="search"] {
-                width: 150px;
-                display: none;
-            }
-
-            .category-container {
-                grid-template-columns: repeat(6, 1fr);
-            }
-
-            .category-card img {
-                width: 65%;
-                height: 45px;
-            }
-
-            .category-card {
-                height: 90px;
-            }
-
-            .populer-produk{
-                text-align: left;
-                margin-top: 20px;
-                margin-left: 65px;
-            }
-
-            .product-container {
-                margin-left: 60px;
-                margin-right: 60px;
-                gap: 1px;
-            }
-
-            .product-card {
-                width: calc(20% - 10px); /* Produk akan lebih besar pada layar kecil */
-                height: 400px;
-                margin-bottom: 10px; /* Menambahkan jarak antara produk */
-                height: 280px;
-                flex-direction: column;
-            }
-
-            /* Gambar Produk */
-            .product-image {
-                width: 100%;
-                height: 80px;
-                object-fit: cover;
-            }
-
-            /* Nama Kategori Produk */
-            .product-category {
-                font-size: 6px;
-            }
-
-            /* Nama Produk */
-            .product-name {
-                font-size: 9px;
-            }
-
-            /* Rating Produk */
-            .product-rating {
-                font-size: 9px;
-            }
-
-            /* Nama Merek Produk */
-            .product-brand {
-                font-size: 8px;
-            }
-
-            .current-price {
-                font-size: 6px;
-                flex-direction: column;
-            }
-
-            /* Tombol Add to Cart */
-            .add-to-cart {
-                padding: 2px 4px;
-                font-size: 6px;
-            }
-
-            .add-to-cart img {
-                margin-right: 5px; 
-                width: 8px;
-                height: 8px;
-            }
-
-            .add-to-cart:hover {
-                background-color: #ACE1AF;
-            }
-
-            footer {
-                padding: 5px 40px;  
-            }
-
-            .footer-left p {
-                font-size: 10px;
-            }
-
-            .social-icon img {
-                width: 14px;
-                height: 14px;
-            }
-        }
-
         .discussion-card {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: #ffffff;
+            transition: var(--transition-smooth);
         }
-
-        .discussion-card .jawaban {
-            margin-top: 10px;
-            color: green;
+        .discussion-card:hover {
+            box-shadow: var(--shadow-card-hover);
+            border-color: var(--border-hover);
         }
-
-        .discussion-card .no-jawaban {
-            margin-top: 10px;
-            color: gray;
-            font-style: italic;
-        }
-
-        .discussion-container {
-            max-height: 600px;
-            overflow-y: auto;
+        .reply-box {
+            background-color: var(--brand-primary-subtle);
+            border-left: 3px solid var(--brand-primary);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
         }
     </style>
 </head>
-<body>
+<body class="bg-light">
 
-    <header>
-        <div class="container">
-            <div class="logo">
-                <a href="{{ url('/') }}">
-                    <img src="{{ asset('images/logo2.png') }}" alt="Brand Logo">
-                </a>
+    <!-- ReUseMart Unified Header -->
+    <header class="reusemart-header">
+        <div class="header-container container">
+            <div class="header-left">
+                <div class="logo">
+                    <a href="{{ url('/') }}">
+                        <img src="{{ asset('images/logo2.png') }}" alt="ReUseMart Brand Logo">
+                    </a>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="{{ url('/kategori') }}">Collection</a></li>
+                        <li><a href="{{ url('/about') }}">About Us</a></li>
+                    </ul>
+                </nav>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="{{ url('/kategori') }}" style="color: white;">Collection</a></li>
-                    <li><a href="/about" style="color: white;">About Us</a></li>
-                </ul>
-            </nav>
-            <!-- Cart, Search, and Location -->
+            
             <div class="cart-search">
-                <!-- Icons -->
                 <div class="icons">
-                    <a href="{{ route('keranjang') }}"><img src="https://img.icons8.com/material/24/ffffff/shopping-cart.png" alt="Cart"></a>
-                    <a href="{{ route('diskusi.index') }}"><img src="https://img.icons8.com/?size=100&id=123773&format=png&color=ffffff" alt="Diskusi"></a>
-                    <a href="{{ route(Auth::guard('penitip')->check() ? 'penitip.profil' : 'pembeli.profil') }}">
+                    <a href="{{ route('keranjang') }}" title="Keranjang Belanja">
+                        <img src="https://img.icons8.com/material/24/ffffff/shopping-cart.png" alt="Cart">
+                    </a>
+                    <a href="{{ route('diskusi.index') }}" title="Ruang Diskusi" class="active">
+                        <img src="https://img.icons8.com/?size=100&id=123773&format=png&color=ffffff" alt="Diskusi">
+                    </a>
+                    <a href="{{ route(Auth::guard('penitip')->check() ? 'penitip.profil' : 'pembeli.profil') }}" title="Profil Pengguna">
                         <img src="https://img.icons8.com/material/24/ffffff/user.png" alt="Account">
                     </a>
                 </div>
@@ -580,71 +63,136 @@
         </div>
     </header>
 
-<div class="container mt-5">
-    <h2 class="mb-4">Diskusi Produk</h2>
+<div class="container py-5" style="max-width: 1000px;">
+    <!-- Page Header Title -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <span class="badge bg-white text-muted border px-3 py-1 rounded-pill small mb-2">Tanya & Jawab</span>
+            <h2 class="fw-bold mb-1">Diskusi Produk</h2>
+            <p class="text-muted small mb-0">Ajukan pertanyaan seputar produk titipan kepada pengelola ReUseMart</p>
+        </div>
+    </div>
 
-    {{-- Daftar diskusi --}}
-    <div class="discussion-container">
-        <!-- Formulir Pertanyaan Baru -->
-        <div class="mt-5">
-            <h3>Tanyakan Produk</h3>
-            <form action="{{ route('diskusi.tanya') }}" method="POST">
+    <!-- Formulir Pertanyaan Baru -->
+    <div class="card mb-5 border-0 shadow-sm">
+        <div class="card-header bg-white py-3 border-bottom">
+            <h5 class="card-title fw-bold mb-0" style="color: var(--brand-primary-dark);">
+                <i class="bi bi-chat-left-text me-2"></i> Ajukan Pertanyaan Baru
+            </h5>
+        </div>
+        <div class="card-body p-4">
+            <form action="{{ route('diskusi.tanya') }}" method="POST" novalidate id="formDiskusi">
                 @csrf
                 <div class="mb-3">
-                    <label for="barang_id" class="form-label">Pilih Produk</label>
-                    <select id="barang_id" name="barang_id" class="form-select" required>
-                        <option value="">Pilih Produk</option>
+                    <label for="barang_id" class="form-label small fw-semibold">Pilih Produk Yang Ingin Ditanyakan</label>
+                    <select id="barang_id" name="barang_id" class="form-select">
+                        <option value="" selected disabled>— Pilih Produk Tersedia —</option>
                         @foreach ($barangAvailable as $barang)
-                            <option value="{{ $barang->id_barang }}">{{ $barang->nama_barang }}</option>
+                            <option value="{{ $barang->id_barang }}">
+                                {{ $barang->nama_barang }} (Rp {{ number_format($barang->harga_jual, 0, ',', '.') }})
+                            </option>
                         @endforeach
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="pertanyaan" class="form-label">Pertanyaan</label>
-                    <textarea id="pertanyaan" name="pertanyaan" class="form-control" rows="3" required></textarea>
+                    <label for="pertanyaan" class="form-label small fw-semibold">Detail Pertanyaan</label>
+                    <textarea id="pertanyaan" name="pertanyaan" class="form-control" rows="3" placeholder="Tuliskan pertanyaan Anda mengenai kondisi barang, kelengkapan, dll..."></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Kirim Pertanyaan</button>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary px-4 py-2">
+                        Kirim Pertanyaan
+                    </button>
+                </div>
             </form>
         </div>
+    </div>
 
+    <!-- Daftar Diskusi -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h5 class="fw-bold mb-0">Daftar Tanya Jawab</h5>
+        <span class="text-muted small">Total: {{ $diskusi->total() }} diskusi</span>
+    </div>
+
+    <div class="discussion-list">
         @forelse ($diskusi as $d)
-            <div class="discussion-card mt-4">
-                <div>
-                    <strong>Produk:</strong> 
-                    {{ $d->barang_titipan ? $d->barang_titipan->nama_barang : 'Produk tidak ditemukan' }}
-                </div>
-                <div>
-                    <strong>Pembeli:</strong> {{ $d->pembeli->nama_pembeli }}
-                </div>
-                <strong>Pertanyaan:</strong>
-                <p>{{ $d->pertanyaan }}</p>
-                <div class="{{ $d->jawaban ? 'jawaban' : 'no-jawaban' }}">
-                    @if ($d->jawaban)
-                        <strong>Dijawab oleh:</strong> {{ $d->pegawai->nama_pegawai }}
-                        <div>
-                            <strong>Jawaban:</strong> 
-                            <p>{{ $d->jawaban }}</p>
+            <div class="card discussion-card mb-3 p-4">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <span class="badge bg-light text-dark border px-2 py-1 rounded small fw-semibold">
+                            <i class="bi bi-box me-1"></i> {{ $d->barang_titipan ? $d->barang_titipan->nama_barang : 'Produk tidak ditemukan' }}
+                        </span>
+                        <div class="mt-2 text-muted small">
+                            Ditanyakan oleh <strong class="text-dark">{{ $d->pembeli->nama_pembeli ?? 'Pembeli' }}</strong>
+                            • {{ $d->tanggal_tanya ? $d->tanggal_tanya->format('d M Y, H:i') : '' }}
                         </div>
+                    </div>
+                    @if ($d->jawaban)
+                        <span class="badge-status badge-tersedia">
+                            <i class="bi bi-check-circle me-1"></i> Sudah Dijawab
+                        </span>
                     @else
-                        <em>Belum dijawab oleh admin</em>
+                        <span class="badge-status badge-didonasikan">
+                            <i class="bi bi-clock-history me-1"></i> Menunggu Jawaban
+                        </span>
                     @endif
                 </div>
-                <div class="mt-2">
-                    <strong>Dibuat pada:</strong> {{ $d->tanggal_tanya->format('d M Y H:i') }}
-                    @if ($d->tanggal_jawab)
-                        <br>
-                        <strong>Dijawab Pada:</strong> {{ $d->tanggal_jawab->format('d M Y H:i') }}
-                    @endif
+
+                <div class="my-2">
+                    <p class="mb-0 text-dark fw-medium">{{ $d->pertanyaan }}</p>
                 </div>
+
+                @if ($d->jawaban)
+                    <div class="reply-box p-3 mt-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="small fw-bold" style="color: var(--brand-primary-dark);">
+                                <i class="bi bi-shield-check me-1"></i> Pengelola ({{ $d->pegawai->nama_pegawai ?? 'Customer Service' }})
+                            </span>
+                            @if ($d->tanggal_jawab)
+                                <span class="text-muted small">
+                                    {{ $d->tanggal_jawab->format('d M Y, H:i') }}
+                                </span>
+                            @endif
+                        </div>
+                        <p class="mb-0 small text-dark">{{ $d->jawaban }}</p>
+                    </div>
+                @else
+                    <div class="text-muted small fst-italic mt-2">
+                        Belum ada jawaban dari pihak pengelola. Tim kami akan segera menanggapi.
+                    </div>
+                @endif
             </div>
         @empty
-            <p>Belum ada diskusi untuk produk ini.</p>
+          <div class="card p-5 text-center text-muted border-0 shadow-sm">
+            <div class="fs-1 mb-2 text-muted"><i class="bi bi-chat-square-dots"></i></div>
+                <h6 class="fw-bold text-dark">Belum Ada Diskusi</h6>
+                <p class="small mb-0">Jadilah yang pertama mengajukan pertanyaan tentang produk di ReUseMart.</p>
+            </div>
         @endforelse
+
         <div class="d-flex justify-content-center mt-4">
             {!! $diskusi->withQueryString()->links('pagination::bootstrap-5') !!}
         </div>
     </div>
 </div>
 
+<!-- ReUseMart Unified Footer -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-left">
+            <p>© 2025 ReUseMart. Solusi Belanja & Titip Jual Berkelanjutan.</p>
+        </div>
+        <div class="footer-middle">
+            <div class="social-icons">
+                <a href="#" class="social-icon" title="Facebook"><img src="https://img.icons8.com/material/24/000000/facebook.png" alt="Facebook"></a>
+                <a href="#" class="social-icon" title="Twitter"><img src="https://img.icons8.com/material/24/000000/twitter.png" alt="Twitter"></a>
+                <a href="#" class="social-icon" title="Instagram"><img src="https://img.icons8.com/material/24/000000/instagram.png" alt="Instagram"></a>
+                <a href="#" class="social-icon" title="Pinterest"><img src="https://img.icons8.com/material/24/000000/pinterest.png" alt="Pinterest"></a>
+                <a href="#" class="social-icon" title="YouTube"><img src="https://img.icons8.com/material/24/000000/youtube.png" alt="YouTube"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

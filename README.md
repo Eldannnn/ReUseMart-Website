@@ -1,61 +1,153 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="public/images/logo2.png" width="160" alt="ReUseMart Logo">
 </p>
 
-## About Laravel
+<h1 align="center">ReUseMart</h1>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+  <strong>Platform E-Commerce & Konsinyasi Barang Bekas Berkualitas</strong>
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<p align="center">
+  Platform web e-commerce berbasis konsinyasi (titip jual) dan penyaluran donasi sosial yang menghubungkan pembeli, penitip barang, pengelola gudang, customer service, kurir, hunter, organisasi sosial, dan pemilik bisnis (owner) dalam satu sistem terpadu.
+</p>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Fitur Utama
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Katalog & Pembelian Pelanggan:** Pencarian produk titipan, filter kategori, keranjang belanja, integrasi rating penitip, pembayaran virtual account, serta pelacakan pengiriman dan pengambilan barang.
+- **Portal Penitip Barang:** Pendaftaran barang titipan, pemantauan status penjualan barang, perhitungan bagi hasil dan saldo dompet, serta perpanjangan masa titip.
+- **Portal Organisasi Sosial:** Pengajuan permohonan donasi barang, pelacakan riwayat alokasi bantuan, dan konfirmasi penerimaan barang donasi.
+- **Manajemen Operasional Gudang:** Penerimaan barang dan pencatatan Quality Control (QC), pencetakan nota serah terima barang titipan, penataan stok gudang, proses pengembalian barang tidak terjual, serta penjadwalan kurir pengiriman.
+- **Customer Service:** Verifikasi bukti pembayaran transaksi, layanan forum diskusi tanya-jawab produk, pengelolaan data penitip, dan pencatatan klaim reward merchandise pelanggan.
+- **Laporan & Eksekutif Owner:** Dashboard visualisasi penjualan bulanan (Chart.js), laporan penjualan per kategori, laporan komisi bersih, laporan stok gudang, laporan barang habis masa titip, dan pengelolaan alokasi donasi sosial.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Teknologi yang Digunakan
 
-## Laravel Sponsors
+- **Backend Framework:** Laravel 11 (PHP 8.2+)
+- **Database Engine:** MySQL / TiDB Cloud
+- **Frontend & Styling:** Bootstrap 5.3, Blade Templating, Google Fonts (Plus Jakarta Sans)
+- **Desain UI/UX:** Sistem tema terpusat (`public/css/reusemart-theme.css`) dengan warna identitas ReUseMart (Olive Green `#6f8f46`)
+- **Pencetakan Dokumen:** DomPDF / Barryvdh Laravel-DOMPDF untuk nota transaksi dan laporan resmi
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## Kredensial Akun Pengujian
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+Akses halaman login pada alamat: `http://localhost:8000/login`
 
-## Contributing
+> **Petunjuk Login:**
+> 1. Buka halaman login.
+> 2. Pilih **Tipe Pengguna** (*Pegawai*, *Pembeli*, *Penitip*, atau *Organisasi*).
+> 3. Masukkan kredensial pengujian berikut.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 1. Akun Pegawai (Tipe Pengguna: Pegawai)
 
-## Code of Conduct
+Setiap akun pegawai akan otomatis diarahkan ke dashboard operasional sesuai jabatannya.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Jabatan | Nama Pegawai | Email Login | Password | Akses Halaman |
+| :--- | :--- | :--- | :--- | :--- |
+| **Owner** | Raka Pratama | `raka@reusmart.com` | `password123` | Dashboard Owner & Laporan Eksekutif |
+| **Kepala Gudang** | Rani Astuti | `rani@reusmart.com` | `password123` | Dashboard Kepala Gudang |
+| **Customer Service** | Dina Rahmawati | `dina@reusmart.com` | `password123` | Verifikasi Pembayaran & Diskusi |
+| **Admin** | Andri Setiawan | `andri@reusmart.com` | `password123` | Manajemen Organisasi & Top Seller |
+| **Pegawai Gudang** | Bayu Prasetyo | `bayu@reusmart.com` | `password123` | QC Barang, Nota Penitipan, Pengiriman |
+| **Kurir** | Cahyono | `cahyono@reusmart.com` | `password123` | Jadwal Pengantaran Barang |
+| **Hunter** | Tono Wahyudi | `tono@reusmart.com` | `password123` | Pengadaan Barang Titipan |
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 2. Akun Pembeli (Tipe Pengguna: Pembeli)
 
-## License
+| Nama Pembeli | Email Login | Password | Status Akun |
+| :--- | :--- | :--- | :--- |
+| **Aulia Dindasari** | `dindz01@mail.com` | `password1` | Aktif |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+### 3. Akun Penitip (Tipe Pengguna: Penitip)
+
+| Nama Penitip | Email Login | Password | Status Akun |
+| :--- | :--- | :--- | :--- |
+| **Yohanis Mabel** | `yohanis@mail.com` | `pass123` | Aktif |
+
+---
+
+### 4. Akun Organisasi Sosial (Tipe Pengguna: Organisasi)
+
+Pada form login, pilih tipe pengguna **Organisasi**, pilih nama organisasi pada menu dropdown, dan masukkan password terkait.
+
+| Nama Organisasi | Password | Status Akun |
+| :--- | :--- | :--- |
+| **Panti Asuhan Pelita Hati** | `pelita123` | Aktif |
+
+---
+
+## Panduan Instalasi & Menjalankan Proyek
+
+### Prasyarat Sistem
+- PHP >= 8.2 (dengan ekstensi `pdo_mysql`, `curl`, `mbstring`, `openssl`, `gd`)
+- Composer
+- Web Server / MySQL Database
+
+### Langkah Instalasi
+
+1. **Clone repositori:**
+   ```bash
+   git clone <url-repository-anda>
+   cd reusmart_p3l_web
+   ```
+
+2. **Pasang dependensi PHP:**
+   ```bash
+   composer install
+   ```
+
+3. **Buat berkas konfigurasi lingkungan:**
+   Salin berkas template lingkungan ke `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Konfigurasi basis data:**
+   Buka berkas `.env` dan sesuaikan koneksi database Anda (nama basis data, username, dan password database lokal/server):
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=nama_database_anda
+   DB_USERNAME=username_database_anda
+   DB_PASSWORD=password_database_anda
+   ```
+
+5. **Generate Application Key:**
+   ```bash
+   php artisan key:generate
+   ```
+
+6. **Migrasi Basis Data:**
+   ```bash
+   php artisan migrate
+   ```
+
+7. **Bersihkan Cache Aplikasi:**
+   ```bash
+   php artisan optimize:clear
+   ```
+
+8. **Jalankan Server Lokal:**
+   ```bash
+   php artisan serve
+   ```
+   Aplikasi dapat diakses melalui peramban web pada alamat: `http://localhost:8000`
+
+---
+
+## Standar Arsitektur & Kualitas Kode
+
+- **Separation of Concerns:** Pemisahan tanggung jawab yang jelas antara Controller, Service, Model, dan Blade View.
+- **Custom UI Action Validation:** Seluruh formulir menerapkan atribut `novalidate` dan validasi antarmuka berbasis modal/toast kustom tanpa mengandalkan dialog native browser (`alert`, `confirm`, `prompt`).
+- **Unified Brand Design:** Palet warna konsisten berbasis tema resmi ReUseMart (Olive Green `#6f8f46`) pada seluruh alur pengguna.

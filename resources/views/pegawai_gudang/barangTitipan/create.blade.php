@@ -5,237 +5,240 @@
     $pegawai = auth()->guard('pegawai')->user();
 @endphp
 
-<style>
-    #preview-container img {
-        margin: 5px;
-        border: 2px solid #ddd;
-        padding: 5px;
-        border-radius: 5px;
-    }
-</style>
-
-<div class="d-flex justify-content-center align-items-center" style="padding-top: 40px; padding-bottom: 40px;">
-    <div class="card shadow" style="width: 1000px; height: 1500px;">
-        <div class="card-body">
-            <h2 class="mb-2 text-center"><strong>Tambah Barang Titipan</strong></h2>
-            <p class="text-center">
-                <strong>Oleh:</strong> P{{ $pegawai->id_pegawai }} - {{ $pegawai->nama_pegawai }}
-            </p>
-
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <strong>Oops!</strong> Ada kesalahan pada input:<br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form action="{{ route('pegawai_gudang.barangTitipan.store') }}" method="POST"  enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="id_nota" value="{{ $nota->id_nota }}">
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="no_nota" class="form-label">No Nota</label>
-                        <input type="text" id="no_nota" class="form-control" readonly value="{{ $nota->no_nota }}">
-                    </div>
-
-                    <input type="hidden" name="id_penitip" value="{{ $penitip->id_penitip }}">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Penitip</label>
-                        <input type="text" class="form-control"
-                            value="T{{ $penitip->id_penitip }} - {{ $penitip->nama_penitip }}" readonly>
+<div class="container-fluid px-2">
+    <div class="row justify-content-center py-3">
+        <div class="col-12 col-xl-10">
+            <div class="card border-0 shadow-sm" style="border: 1px solid var(--border-color) !important; border-radius: var(--radius-lg);">
+                <div class="card-header bg-white border-bottom p-4">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <div>
+                            <h4 class="fw-bold mb-1" style="color: var(--text-heading);">Tambah Barang Titipan</h4>
+                            <p class="text-muted small mb-0">
+                                <strong>Staf Gudang:</strong> P{{ $pegawai->id_pegawai }} - {{ $pegawai->nama_pegawai }} • 
+                                <strong>Nota:</strong> #{{ $nota->no_nota }}
+                            </p>
+                        </div>
+                        <span class="badge-status badge-tersedia">
+                            <i class="bi bi-person-check-fill me-1"></i> T{{ $penitip->id_penitip }} - {{ $penitip->nama_penitip }}
+                        </span>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="id_qc_pegawai" class="form-label">Pegawai QC</label>
+                <div class="card-body p-4">
+                    @if ($errors->any())
+                        <div class="alert alert-danger border-0 shadow-sm mb-4">
+                            <strong class="d-block mb-1">Ada data yang belum sesuai:</strong>
+                            <ul class="mb-0 ps-3">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
-                        {{-- Kirim nilai id_qc_pegawai lewat input hidden --}}
-                        <input type="hidden" name="id_qc_pegawai" value="{{ old('id_qc_pegawai', $nota->id_qc_pegawai ?? '') }}">
+                    <form action="{{ route('pegawai_gudang.barangTitipan.store') }}" method="POST" enctype="multipart/form-data" novalidate id="createBarangForm">
+                        @csrf
+                        <input type="hidden" name="id_nota" value="{{ $nota->id_nota }}">
+                        <input type="hidden" name="id_penitip" value="{{ $penitip->id_penitip }}">
 
-                        {{-- Tampilkan nama pegawai QC readonly --}}
-                        <input type="text" class="form-control" readonly
-                            value="{{ 
-                                ($pegawai = $pegawaiQc->firstWhere('id_pegawai', old('id_qc_pegawai', $nota->id_qc_pegawai ?? '')))
-                                    ? 'P' . $pegawai->id_pegawai . ' - ' . $pegawai->nama_pegawai 
-                                    : '-' 
-                            }}">
-                    </div>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label for="no_nota" class="form-label fw-semibold">Nomor Nota Konsinyasi</label>
+                                <input type="text" id="no_nota" class="form-control" readonly value="{{ $nota->no_nota }}">
+                            </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Hunter</label>
-                        <select name="id_hunter" class="form-select">
-                            <option value="">-- Tidak Ada --</option>
-                            @foreach ($pegawaiHunter as $hunter)
-                                <option value="{{ $hunter->id_pegawai }}">P{{ $hunter->id_pegawai }} - {{ $hunter->nama_pegawai }}</option>
-                            @endforeach
-                        </select>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Nama Mitra Penitip</label>
+                                <input type="text" class="form-control" value="T{{ $penitip->id_penitip }} - {{ $penitip->nama_penitip }}" readonly>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="id_qc_pegawai" class="form-label fw-semibold">Petugas Quality Control (QC)</label>
+                                <input type="hidden" name="id_qc_pegawai" value="{{ old('id_qc_pegawai', $nota->id_qc_pegawai ?? '') }}">
+                                <input type="text" class="form-control" readonly
+                                    value="{{ 
+                                        ($pegawaiQCItem = $pegawaiQc->firstWhere('id_pegawai', old('id_qc_pegawai', $nota->id_qc_pegawai ?? '')))
+                                            ? 'P' . $pegawaiQCItem->id_pegawai . ' - ' . $pegawaiQCItem->nama_pegawai 
+                                            : '-' 
+                                    }}">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Petugas Hunter</label>
+                                <select name="id_hunter" class="form-select">
+                                    <option value="">-- Tidak Ada Petugas Hunter --</option>
+                                    @foreach ($pegawaiHunter as $hunter)
+                                        <option value="{{ $hunter->id_pegawai }}">P{{ $hunter->id_pegawai }} - {{ $hunter->nama_pegawai }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="nama_barang" class="form-label fw-semibold">Nama Barang Titipan</label>
+                                <input type="text" name="nama_barang" class="form-control" placeholder="Contoh: Kemeja Flanel Vintage" value="{{ old('nama_barang') }}">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="id_kategori" class="form-label fw-semibold">Kategori Barang</label>
+                                <select name="id_kategori" class="form-select">
+                                    <option value="" disabled selected>-- Pilih Kategori --</option>
+                                    @foreach ($kategori as $k)
+                                        <option value="{{ $k->id_kategori }}" {{ old('id_kategori') == $k->id_kategori ? 'selected' : '' }}>
+                                            {{ $k->nama_kategori }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="berat" class="form-label fw-semibold">Estimasi Berat (kg)</label>
+                                <input type="number" step="0.01" name="berat" class="form-control" placeholder="Contoh: 1.25" value="{{ old('berat') }}">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="harga_jual" class="form-label fw-semibold">Harga Jual Yang Ditetapkan (Rp)</label>
+                                <input type="number" name="harga_jual" class="form-control" placeholder="Contoh: 85000" value="{{ old('harga_jual') }}">
+                            </div>
+
+                            <div class="col-12">
+                                <label for="deskripsi" class="form-label fw-semibold">Deskripsi & Kondisi Fisik Barang</label>
+                                <textarea name="deskripsi" rows="3" class="form-control" placeholder="Tuliskan kelengkapan, minus, atau kondisi detail produk...">{{ old('deskripsi') }}</textarea>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Garansi Pembeli</label>
+                                <select name="garansi" class="form-select">
+                                    <option value="1">Tersedia Garansi</option>
+                                    <option value="0">Tidak Ada Garansi</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="tanggal_garansi" class="form-label fw-semibold">Batas Masa Garansi</label>
+                                <input type="date" name="tanggal_garansi" class="form-control" value="{{ old('tanggal_garansi') }}">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Status Awal Barang</label>
+                                <input type="text" name="status_barang" class="form-control" value="{{ old('status_barang', 'Tersedia') }}">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Opsi Perpanjangan Otomatis</label>
+                                <select name="status_perpanjangan" class="form-select">
+                                    <option value="0">Tidak (Hanya 30 Hari)</option>
+                                    <option value="1">Ya (Diperpanjang jika belum laku)</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Waktu Masuk Titipan</label>
+                                <input type="datetime-local" id="tanggal_masuk" name="tanggal_masuk" class="form-control bg-light"
+                                    value="{{ old('tanggal_masuk', now()->format('Y-m-d\TH:i')) }}" readonly>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Batas Akhir Titipan (30 Hari)</label>
+                                <input type="datetime-local" id="tanggal_akhir" name="tanggal_akhir" class="form-control bg-light"
+                                    value="{{ old('tanggal_akhir', now()->addDays(30)->format('Y-m-d\TH:i')) }}" readonly>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Unggah Foto Barang (Minimal 2 Foto)</label>
+                                <input type="file" name="foto_barang[]" class="form-control" id="foto_barang" multiple>
+                                <small class="text-muted">Pilih minimal 2 sudut foto (.jpg, .jpeg, .png) untuk verifikasi detail pembeli.</small>
+
+                                <div id="preview-container" class="d-flex flex-wrap gap-2 mt-3"></div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <button type="submit" name="action" value="add" class="btn btn-primary px-4">
+                                <i class="bi bi-plus-circle me-1"></i> Tambahkan Barang ke Nota
+                            </button>
+                        </div>
+                    </form>
+
+                    {{-- Daftar Barang dalam Nota Ini --}}
+                    <div class="mt-5 pt-3 border-top">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h5 class="fw-bold mb-0" style="color: var(--text-heading);">
+                                <i class="bi bi-box-seam me-2" style="color: var(--brand-primary);"></i>
+                                Daftar Barang dalam Nota #{{ $nota->no_nota }}
+                            </h5>
+                            <span class="badge bg-light text-muted border">{{ $barangNota->count() }} item</span>
+                        </div>
+
+                        <div class="table-card">
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0 text-center">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 120px;">Kode Barang</th>
+                                            <th class="text-start">Nama Barang</th>
+                                            <th class="text-center" style="width: 140px;">Status</th>
+                                            <th class="text-center" style="width: 100px;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($barangNota as $barang)
+                                        <tr>
+                                            <td class="fw-semibold text-muted font-monospace">
+                                                {{ strtoupper(substr($barang->nama_barang, 0, 1)) . $barang->id_barang }}
+                                            </td>
+                                            <td class="text-start fw-bold" style="color: var(--text-heading);">{{ $barang->nama_barang }}</td>
+                                            <td>
+                                                <span class="badge-status badge-tersedia">
+                                                    {{ $barang->status_barang }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('pegawai_gudang.barangTitipan.edit', [
+                                                        'id'      => $barang->id_barang,
+                                                        'context' => 'create',
+                                                        'id_nota' => $nota->id_nota
+                                                    ]) }}" class="btn btn-sm btn-outline-primary" title="Edit Item">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="4" class="py-4 text-center text-muted">Belum ada barang yang ditambahkan ke nota ini.</td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center mt-3">
+                            {{ $barangNota->links('pagination::bootstrap-5') }}
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                            <a href="{{ route('pegawai_gudang.notaPenitipan.index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar Penitipan
+                            </a>
+
+                            <form action="{{ route('pegawai_gudang.barangTitipan.store') }}" method="POST" novalidate>
+                                @csrf
+                                <input type="hidden" name="id_nota" value="{{ $nota->id_nota }}">
+                                <input type="hidden" name="action" value="finish">
+
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="bi bi-check2-circle me-1"></i> Selesai & Simpan Nota
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="nama_barang" class="form-label">Nama Barang</label>
-                        <input type="text" name="nama_barang" class="form-control" required value="{{ old('nama_barang') }}">
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="id_kategori" class="form-label">Kategori</label>
-                        <select name="id_kategori" class="form-select" required>
-                            <option value="">-- Pilih Kategori --</option>
-                            @foreach ($kategori as $k)
-                                <option value="{{ $k->id_kategori }}" {{ old('id_kategori') == $k->id_kategori ? 'selected' : '' }}>
-                                    {{ $k->nama_kategori }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="berat" class="form-label">Berat (kg)</label>
-                        <input type="number" step="0.01" name="berat" class="form-control" required value="{{ old('berat') }}">
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="harga_jual" class="form-label">Harga Jual</label>
-                        <input type="number" name="harga_jual" class="form-control" required value="{{ old('harga_jual') }}">
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="deskripsi" class="form-label">Deskripsi</label>
-                    <textarea name="deskripsi" rows="3" class="form-control">{{ old('deskripsi') }}</textarea>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Garansi</label>
-                        <select name="garansi" class="form-select">
-                            <option value="1">Tersedia</option>
-                            <option value="0">Tidak Tersedia</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="tanggal_garansi" class="form-label">Tanggal Garansi</label>
-                        <input type="date" name="tanggal_garansi" class="form-control" value="{{ old('tanggal_garansi') }}">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Status Barang</label>
-                        <input type="text" name="status_barang" class="form-control" value="{{ old('status_barang', 'Tersedia') }}" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Status Perpanjangan</label>
-                        <select name="status_perpanjangan" class="form-select">
-                            <option value="0">Tidak</option>
-                            <option value="1">Ya</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Tanggal Masuk</label>
-                        <input type="datetime-local" id="tanggal_masuk" name="tanggal_masuk" class="form-control"
-                            value="{{ old('tanggal_masuk', now()->format('Y-m-d\TH:i')) }}" readonly>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Tanggal Akhir</label>
-                        <input type="datetime-local" id="tanggal_akhir" name="tanggal_akhir" class="form-control"
-                            value="{{ old('tanggal_akhir', now()->addDays(30)->format('Y-m-d\TH:i')) }}" readonly>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Foto Barang (minimal 2 gambar)</label>
-                    <input type="file" name="foto_barang[]" class="form-control" id="foto_barang" multiple required>
-                    <small class="text-muted">Upload minimal 2 gambar. File bertipe .jpg, .jpeg, .png</small>
-
-                    <!-- Preview Gambar -->
-                    <div id="preview-container" class="mt-3">
-                        <!-- Preview gambar akan ditambahkan di sini -->
-                    </div>
-                </div>
-
-               <div class="text-end">
-                    {{-- Tombol “Tambah” --}}
-                    <button type="submit" name="action" value="add" class="btn btn-success me-1">
-                        Tambah
-                    </button>
-                   
-                </div>
-            </form>
-
-        {{-- Tampilkan daftar barang yang sudah ditambahkan --}}
-        <hr>
-        <h5><strong>Daftar Barang dalam Nota Ini:</strong></h5>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th class="text-center">Kode Barang</th>
-                    <th class="text-center">Nama Barang</th>
-                    <th class="text-center">Status</th>
-                    <th class="text-center">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($barangNota as $barang)
-                <tr>
-                    <td class="text-center">{{ strtoupper(substr($barang->nama_barang, 0, 1)) . $barang->id_barang }}</td>
-                    <td>{{ $barang->nama_barang }}</td>
-                    <td class="text-center">{{ $barang->status_barang }}</td>
-                    <td class="text-center">
-                        <a href="{{ route('pegawai_gudang.barangTitipan.edit', [
-                                'id'      => $barang->id_barang,
-                                'context' => 'create',
-                                'id_nota' => $nota->id_nota
-                            ]) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i>
-                        </a>
-                        <!-- <a href="{{ route('pegawai_gudang.barangTitipan.edit', $barang->id_barang) }}" class="btn btn-warning btn-sm">Edit</a> -->
-                        {{-- Tambahkan tombol hapus jika perlu --}}
-                    </td>
-                </tr>
-                @endforeach
-
-                @if($barangNota->isEmpty())
-                <tr>
-                    <td colspan="4" class="text-center">Belum ada barang ditambahkan.</td>
-                </tr>
-                @endif
-            </tbody>
-        </table>
-        {{-- Menampilkan pagination --}}
-        <div class="d-flex justify-content-center">
-            {{ $barangNota->links() }}
-        </div>
-        <div class="text-start mt-3">
-            {{-- Form B: Tombol Selesai (POST action=finish) --}}
-            <form action="{{ route('pegawai_gudang.barangTitipan.store') }}"
-                    method="POST">
-                @csrf
-                <input type="hidden" name="id_nota" value="{{ $nota->id_nota }}">
-                <input type="hidden" name="action" value="finish">
-
-                <button type="submit" class="btn btn-danger">
-                <i class="fas fa-check"></i> Selesai
-                </button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 @endsection
+
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -246,8 +249,6 @@
             if (!tglMasuk || !tglAkhir) return;
 
             const masuk = new Date(tglMasuk.value);
-
-            console.log("Tanggal masuk:", tglMasuk.value);
 
             if (!isNaN(masuk.getTime())) {
                 const akhir = new Date(masuk);
@@ -260,22 +261,15 @@
             }
         }
 
-        // Jalankan sekali saat halaman load
         updateTanggalAkhir();
-
-        // Jalankan saat user ubah input
         tglMasuk.addEventListener('input', updateTanggalAkhir);
         tglMasuk.addEventListener('change', updateTanggalAkhir);
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
+
         const inputFile = document.getElementById('foto_barang');
         const previewContainer = document.getElementById('preview-container');
 
         inputFile.addEventListener('change', function (event) {
-            previewContainer.innerHTML = '';  // Kosongkan preview sebelum menambah gambar baru
-
+            previewContainer.innerHTML = '';
             const files = event.target.files;
             if (files) {
                 Array.from(files).forEach(file => {
@@ -284,9 +278,10 @@
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         img.alt = file.name;
-                        img.classList.add('img-thumbnail', 'm-2');
-                        img.style.width = '150px';  // Atur lebar gambar sesuai keinginan
-                        img.style.height = '150px'; // Atur tinggi gambar sesuai keinginan
+                        img.classList.add('img-thumbnail', 'rounded-3');
+                        img.style.width = '120px';
+                        img.style.height = '120px';
+                        img.style.objectFit = 'cover';
                         previewContainer.appendChild(img);
                     };
                     reader.readAsDataURL(file);
@@ -296,5 +291,3 @@
     });
 </script>
 @endpush
-
-

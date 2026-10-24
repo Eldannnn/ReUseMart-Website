@@ -5,70 +5,33 @@
         <meta name="viewport"content="width=device-width, initial-scale=1.0">
         <title>Dashboard</title>
         
-        <style>
-            .main-sidebar {
-                height: 100vh; /* Menyesuaikan tinggi dengan layar */
-                overflow-y: auto; /* Agar sidebar bisa di-scroll jika terlalu panjang */
-                background: linear-gradient(135deg, rgba(0, 128, 0, 0.7) 0%, rgba(108, 241, 108, 0.7) 100%);
-            }
-
-            .main-header{
-                background-color: #ffffff;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            }
-
-            .nav-sidebar .nav-item .nav-link{
-                border-radius: 10px;
-                transition: background-color 0.3 ease;
-            }
-
-            .nav-sidebar .nav-item .nav-link:hover{
-                background-color: rgba(255, 255, 255, 0.1);
-            }
-
-            .card{
-                border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                transition: transform 0.3s ease-in-out;
-            }
-
-            .card:hover{
-                transform: scale(1.02);
-            }
-
-            .modal-content{
-                border-radius: 10px;
-            }
-
-            .content-wrapper {
-                padding-top: 20px; /* Memberikan padding agar tidak tabrakan dengan header */
-                min-height: calc(100vh - 50px); /* Agar konten tidak tumpang tindih dengan footer */
-            }
-
-            .modal-header{
-                background-color: #3498db;
-                color: white;
-            }
-
-            .btn-close{
-                background-color: white;
-            }
-
-            .main-footer{
-                background-color: #f8f9fa;
-                border-top: 1px solid #dee2e6;
-                padding: 10px;
-                text-align: center;
-            }
-        </style>
-
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <!-- Google Fonts: Plus Jakarta Sans -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <!-- Link untuk CSS Bootstrap -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/css/adminlte.min.css">
+        
+        <!-- ReUseMart Unified Design System -->
+        <link rel="stylesheet" href="{{ asset('css/reusemart-theme.css') }}">
+        
+        <style>
+            .main-sidebar {
+                height: 100vh;
+                overflow-y: auto;
+            }
+            .brand-link {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+            }
+            .brand-link .brand-text {
+                font-weight: 700 !important;
+                letter-spacing: 0.5px;
+                color: #ffffff !important;
+            }
+        </style>
     </head>
     <body class="hold-transition sidebar-mini">
         <div class="wrapper">

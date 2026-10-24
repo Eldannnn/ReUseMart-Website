@@ -1,16 +1,24 @@
 @extends('CS.dashboard')
 
 @section('isi')
-<div class="container py-5">
-    <h2 class="mb-4">Daftar Pembayaran</h2>
+<div class="container-fluid px-2">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <h3 class="fw-bold mb-1" style="color: var(--text-heading);">Verifikasi Bukti Transfer Pembeli</h3>
+            <p class="text-muted small mb-0">Periksa kesesuaian nominal dan bukti pembayaran transfer bank untuk konfirmasi pesanan</p>
+        </div>
+    </div>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success border-0 shadow-sm alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     @endif
 
     @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
+        <div class="alert alert-danger border-0 shadow-sm mb-4">
+            <ul class="mb-0 ps-3">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -18,110 +26,172 @@
         </div>
     @endif
 
-    <div class="table-responsive">
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>ID Pembayaran</th>
-                    <th>ID Pembeli</th>
-                    <th>ID Pegawai</th>
-                    <th>ID Transaksi</th>
-                    <th>Status Verifikasi</th>
-                    <th>Bukti Transfer</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($pembayarans as $index => $pembayaran)
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 text-center">
+                <thead>
                     <tr>
-                        <td>{{ $pembayarans->firstItem() + $index }}</td>
-                        <td>{{ $pembayaran->id_pembayaran }}</td>
-                        <td>{{ $pembayaran->id_pembeli }}</td>
-                        <td>{{ $pembayaran->id_pegawai ?? '-' }}</td>
-                        <td>{{ $pembayaran->id_transaksi }}</td>
-                        <td>
-                            @php
-                                $status = (int) $pembayaran->status_verifikasi;  // cast ke int biar pasti
-                                $idPegawai = $pembayaran->id_pegawai;
-
-                                $badgeClass = 'bg-secondary';
-                                $statusText = 'Belum Diverifikasi';
-
-                                if ($status === 0 && (is_null($idPegawai) || $idPegawai == '')) {
-                                    $badgeClass = 'bg-secondary';
-                                    $statusText = 'Belum Diverifikasi';
-                                } elseif ($status === 0 && !is_null($idPegawai) && $idPegawai != '') {
-                                    $badgeClass = 'bg-danger';
-                                    $statusText = 'Ditolak';
-                                } elseif ($status === 1) {
-                                    $badgeClass = 'bg-success';
-                                    $statusText = 'Diterima';
-                                }
-                            @endphp
-                            <span class="badge {{ $badgeClass }}">{{ $statusText }}</span>
-                        </td>
-                        <td>
-                            @if ($pembayaran->bukti_transfer)
-                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#verifikasiModal{{ $pembayaran->id_pembayaran }}">
-                                    Verifikasi
-                                </button>
-                            @else
-                                <span class="text-muted">Belum ada</span>
-                            @endif
-                        </td>
+                        <th style="width: 60px;">No</th>
+                        <th>ID Pembayaran</th>
+                        <th>ID Pembeli</th>
+                        <th>Staf CS</th>
+                        <th>ID Transaksi</th>
+                        <th class="text-center">Status Verifikasi</th>
+                        <th class="text-center" style="width: 140px;">Bukti Transfer</th>
                     </tr>
+                </thead>
+                <tbody>
+                    @forelse($pembayarans as $index => $pembayaran)
+                        <tr>
+                            <td class="text-muted">{{ $pembayarans->firstItem() + $index }}</td>
+                            <td class="fw-semibold text-muted">PMB{{ $pembayaran->id_pembayaran }}</td>
+                            <td class="fw-bold" style="color: var(--text-heading);">{{ $pembayaran->id_pembeli }}</td>
+                            <td>
+                                @if($pembayaran->id_pegawai)
+                                    <span class="badge bg-light text-muted border">CS-{{ $pembayaran->id_pegawai }}</span>
+                                @else
+                                    <span class="text-muted small">-</span>
+                                @endif
+                            </td>
+                            <td class="fw-semibold">TRX-{{ $pembayaran->id_transaksi }}</td>
+                            <td>
+                                @php
+                                    $status = (int) $pembayaran->status_verifikasi;
+                                    $idPegawai = $pembayaran->id_pegawai;
+                                @endphp
 
-                    <!-- Modal untuk Bukti Transfer dan Verifikasi -->
-                    <div class="modal fade" id="verifikasiModal{{ $pembayaran->id_pembayaran }}" tabindex="-1" aria-labelledby="verifikasiModalLabel{{ $pembayaran->id_transaksi }}" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="verifikasiModalLabel{{ $pembayaran->id_transaksi }}">Verifikasi Bukti Pembayaran</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                                </div>
-                                <div class="modal-body text-center">
-                                    @if ($pembayaran->bukti_transfer)
-                                        <img src="{{ asset('images/bukti_pembayaran/' . $pembayaran->bukti_transfer) }}" alt="Bukti Pembayaran" class="img-fluid mb-3" style="max-height: 400px;">
-                                    @else
-                                        <p class="text-muted">Belum ada bukti pembayaran.</p>
-                                    @endif
-                                </div>
-                                <div class="modal-footer justify-content-between">
-                                    <div class="d-flex">
-                                        <form action="{{ route('cs.pembayaran.tolak', $pembayaran->id_transaksi) }}" method="POST" onsubmit="return confirm('Tolak bukti pembayaran?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger" 
-                                                @if($pembayaran->status_verifikasi == 1) disabled title="Sudah diverifikasi" @endif>
-                                                Tolak
-                                            </button>
-                                        </form>
-                                    </div>
-                                    
-                                    <div class="d-flex">
-                                        <form action="{{ route('cs.pembayaran.verifikasi', $pembayaran->id_transaksi) }}" method="POST" onsubmit="return confirm('Terima bukti pembayaran?')">
-                                            @csrf
-                                            <button type="submit" class="btn btn-success">
-                                                Terima
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                @empty
-                    <tr>
-                        <td colspan="8" class="text-center">Data pembayaran tidak ditemukan.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                                @if ($status === 1)
+                                    <span class="badge-status badge-tersedia">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Diterima
+                                    </span>
+                                @elseif ($status === 0 && !is_null($idPegawai) && $idPegawai != '')
+                                    <span class="badge-status badge-terjual">
+                                        <i class="bi bi-x-circle-fill me-1"></i> Ditolak
+                                    </span>
+                                @else
+                                    <span class="badge-status badge-didonasikan">
+                                        <i class="bi bi-clock-fill me-1"></i> Menunggu Verifikasi
+                                    </span>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($pembayaran->bukti_transfer)
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-primary btn-inspect-bukti"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#verifikasiModal"
+                                            data-id="{{ $pembayaran->id_pembayaran }}"
+                                            data-trx="{{ $pembayaran->id_transaksi }}"
+                                            data-img="{{ asset('images/bukti_pembayaran/' . $pembayaran->bukti_transfer) }}"
+                                            data-status="{{ $pembayaran->status_verifikasi }}"
+                                            data-verify-url="{{ route('cs.pembayaran.verifikasi', $pembayaran->id_transaksi) }}"
+                                            data-reject-url="{{ route('cs.pembayaran.tolak', $pembayaran->id_transaksi) }}">
+                                        <i class="bi bi-eye me-1"></i> Periksa
+                                    </button>
+                                @else
+                                    <span class="text-muted small">Belum ada</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="py-5 text-center text-muted">
+                                <i class="bi bi-receipt fs-1 d-block mb-2 text-muted opacity-50"></i>
+                                Tidak ada data pembayaran yang ditemukan.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="d-flex justify-content-center mt-4">
         {!! $pembayarans->withQueryString()->links('pagination::bootstrap-5') !!}
     </div>
 </div>
+
+{{-- Unified Modal Verifikasi Bukti Pembayaran --}}
+<div class="modal fade" id="verifikasiModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-file-earmark-check me-2"></i> Periksa Bukti Pembayaran
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4 text-center">
+                <div class="mb-3 text-start p-3 rounded-3" style="background-color: var(--bg-muted);">
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted small">Nomor Transaksi:</span>
+                        <strong id="modalTrxText">-</strong>
+                    </div>
+                </div>
+
+                <div class="p-2 border rounded-3 bg-white mb-3">
+                    <img id="modalBuktiImg" src="" alt="Bukti Transfer" class="img-fluid rounded" style="max-height: 440px; object-fit: contain;">
+                </div>
+            </div>
+            <div class="modal-footer bg-light px-4 py-3 justify-content-between">
+                <form id="formTolakPembayaran" method="POST" novalidate>
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-outline-danger" id="btnTolakPembayaran">
+                        <i class="bi bi-x-circle me-1"></i> Tolak Pembayaran
+                    </button>
+                </form>
+
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <form id="formTerimaPembayaran" method="POST" novalidate>
+                        @csrf
+                        <button type="submit" class="btn btn-primary" id="btnTerimaPembayaran">
+                            <i class="bi bi-check-circle me-1"></i> Terima & Verifikasi
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const inspectButtons = document.querySelectorAll('.btn-inspect-bukti');
+    const modalBuktiImg = document.getElementById('modalBuktiImg');
+    const modalTrxText = document.getElementById('modalTrxText');
+    const formTolak = document.getElementById('formTolakPembayaran');
+    const formTerima = document.getElementById('formTerimaPembayaran');
+    const btnTolak = document.getElementById('btnTolakPembayaran');
+    const btnTerima = document.getElementById('btnTerimaPembayaran');
+
+    inspectButtons.forEach(btn => {
+        btn.addEventListener('click', function(){
+            const imgSrc = this.dataset.img;
+            const trxId = this.dataset.trx;
+            const status = parseInt(this.dataset.status);
+            const verifyUrl = this.dataset.verifyUrl;
+            const rejectUrl = this.dataset.rejectUrl;
+
+            modalBuktiImg.src = imgSrc;
+            modalTrxText.textContent = 'TRX-' + trxId;
+            formTolak.action = rejectUrl;
+            formTerima.action = verifyUrl;
+
+            if (status === 1) {
+                btnTolak.disabled = true;
+                btnTolak.title = "Pembayaran sudah diverifikasi diterima";
+                btnTerima.disabled = true;
+                btnTerima.title = "Pembayaran sudah diverifikasi";
+            } else {
+                btnTolak.disabled = false;
+                btnTolak.removeAttribute('title');
+                btnTerima.disabled = false;
+                btnTerima.removeAttribute('title');
+            }
+        });
+    });
+});
+</script>
 @endsection

@@ -4,341 +4,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Penitip</title>
+    <title>Dashboard Penitip - ReUseMart</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/reusemart-theme.css') }}">
     <style>
-        :root {
-            --primary-color: rgba(111, 143, 70, 1);
+        .penitip-header {
+            background: var(--brand-primary-gradient) !important;
+            box-shadow: 0 4px 20px -2px rgba(111, 143, 70, 0.25);
         }
-        body {
-            background-color: #f5f8f2;
-            font-family: 'Segoe UI', sans-serif;
+        .stat-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 18px 24px;
+            transition: var(--transition-smooth);
         }
-        header {
-            background-color: var(--primary-color);
-            padding: 15px 20px;
-            color: white;
+        .stat-card:hover {
+            box-shadow: var(--shadow-card);
+            border-color: var(--border-hover);
         }
-        .logo img {
-            height: 50px;
-            border-radius: 50%;
-        }
-        .title {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        .table thead {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        .btn-outline-primary {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-        .btn-outline-primary:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        .status-btn {
-            border: none;
-            border-radius: 20px;
-            padding: 5px 12px;
-            font-size: 0.875rem;
-        }
-        .status-tersedia {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .status-terjual {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        .status-didonasikan {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        .status-donasi {
-            background-color: #dee2e6;
-            color: #495057;
-        }
-        .status-diambil {
-            background-color: #dee2e6;
-            color:rgb(14, 180, 209);
-        }
-        footer {
-            background-color: #f4f4f4;
-            padding: 10px 50px;  
-            border-top: 1px solid rgba(111, 143, 70, 1);
-            font-size: 14px;
-            margin-top: 40px;
-        }
-        .footer-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;  
-        }
-        .footer-left p {
-            margin: 0;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-        }
-        .footer-middle {
-            display: flex;
-            justify-content: right;
-            flex: 1;
-        }
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        .social-icon img {
-            width: 21px;
-            height: 21px;
-            transition: transform 0.3s;
-        }
-        .social-icon:hover img {
-            transform: scale(1.2);
-        }     
     </style>
 </head>
-<body>
+<body class="bg-light">
 
-<header class="p-3 mb-3 border-bottom">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-between">
-            <div class="logo">
-                <a href="#"><img src="{{ asset('images/logo2.png') }}" alt="Logo"></a>
-            </div>
+<header class="penitip-header py-3 px-4 border-bottom sticky-top">
+    <div class="container d-flex align-items-center justify-content-between">
+        <div class="logo">
+            <a href="{{ url('/') }}">
+                <img src="{{ asset('images/logo2.png') }}" alt="Logo" style="height: 48px;">
+            </a>
+        </div>
 
-            <div class="mx-auto">
-                <h5 class="mb-0">Dashboard Penitip</h5>
-            </div>
+        <div>
+            <h5 class="mb-0 fw-bold text-white">Dashboard Penitip</h5>
+        </div>
 
-            <div class="dropdown text-end">
-                <a href="{{ route(Auth::guard('penitip')->check() ? 'penitip.profil' : 'pembeli.profil') }}" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://img.icons8.com/material/24/ffffff/user.png" alt="Account" width="32" height="32" class="rounded-circle">
-                </a>
-                <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                    <li>
-                        <a class="dropdown-item" href="{{ route(Auth::guard('penitip')->check() ? 'penitip.profil' : 'pembeli.profil') }}">
-                            Profile
-                        </a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                        <a href="#" class="dropdown-item" onclick="
-                            if(confirm('Yakin ingin logout?')) {
-                                event.preventDefault();
-                                document.getElementById('logout-form').submit();
-                            } else {
-                                event.preventDefault();
-                            }
-                        ">
-                            Logout
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        <div class="dropdown text-end">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle gap-2" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="bg-white bg-opacity-25 rounded-circle p-1 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <img src="https://img.icons8.com/material/24/ffffff/user.png" alt="Account" width="22" height="22">
+                </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="dropdownUser1">
+                <li>
+                    <a class="dropdown-item py-2" href="{{ route('penitip.profil') }}">
+                        <i class="bi bi-person-circle me-2"></i> Profil Saya
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider my-1"></li>
+                <li>
+                    <button type="button" class="dropdown-item py-2 text-danger" data-bs-toggle="modal" data-bs-target="#logoutConfirmModal">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </button>
+                </li>
+            </ul>
         </div>
     </div>
 </header>
 
-<!-- <header class="d-flex justify-content-between align-items-center">
-    <div class="logo">
-        <a href="#"><img src="{{ asset('images/logo2.png') }}" alt="Logo"></a>
-    </div>
-    <div class="title">Dashboard Penitip</div>
-    <div class="dropdown text-end">
-        <a href="{{ route(Auth::guard('penitip')->check() ? 'penitip.profil' : 'pembeli.profil') }}" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://img.icons8.com/material/24/ffffff/user.png" alt="Account" width="32" height="32" class="rounded-circle">
-        </a>
-        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-            <li>
-                <a class="dropdown-item" href="{{ route(Auth::guard('penitip')->check() ? 'penitip.profil' : 'pembeli.profil') }}">
-                    Profile
-                </a>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-                <a href="#" class="dropdown-item" onclick="
-                    if(confirm('Yakin ingin logout?')) {
-                        event.preventDefault();
-                        document.getElementById('logout-form').submit();
-                    } else {
-                        event.preventDefault();
-                    }
-                ">
-                    Logout
-                </a>
-            </li>
-        </ul>
-    </div>
-</header> -->
-
-<div class="container mt-4">
+<div class="container py-4">
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     @endif
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <form action="{{ route('penitip.barang.index') }}" method="GET" class="d-flex" style="gap: 10px;">
-            <input type="text" name="q" class="form-control" placeholder="Cari nama barang..." value="{{ request('q') }}">
-            <button class="btn btn-outline-primary" type="submit">Cari</button>
-        </form>
+    <!-- Stat Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <div class="stat-card d-flex align-items-center justify-content-between p-4">
+                <div>
+                    <span class="text-muted small fw-semibold">Total Barang Dititipkan</span>
+                    <h3 class="fw-bold mb-0 text-dark">{{ $totalBarang }}</h3>
+                </div>
+                <div class="stat-icon-wrapper rounded-circle p-3" style="background: rgba(111,143,70,0.1); color: var(--brand-primary);">
+                    <i class="bi bi-box-seam fs-2"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="stat-card d-flex align-items-center justify-content-between p-4">
+                <div>
+                    <span class="text-muted small fw-semibold">Barang Belum Terjual</span>
+                    <h3 class="fw-bold mb-0 text-dark" style="color: var(--brand-primary) !important;">{{ $totalBarangBelumLaku }}</h3>
+                </div>
+                <div class="stat-icon-wrapper rounded-circle p-3" style="background: rgba(234,179,8,0.1); color: #ca8a04;">
+                    <i class="bi bi-hourglass-split fs-2"></i>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <h4 class="mb-3">Daftar Barang Titipan Anda</h4>
-    <h6 class="mb-3">Jumlah total barang yang Anda titip: <span class="status-btn status-tersedia">{{ $totalBarang }}</span></h6>
-    <h6 class="mb-3">Yang belum laku: <t><span class="status-btn status-terjual">{{ $totalBarangBelumLaku }}</span></h6>
-    
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Foto</th>
-                    <th>Nama Barang</th>
-                    <th>Status</th>
-                    <th>Tanggal Masuk</th>
-                    <th>Tanggal Keluar</th>
-                    <th>Sisa Waktu</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($barangs as $index => $barang)
+    <!-- Main Content Table Card -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h5 class="fw-bold mb-0" style="color: var(--brand-primary-dark);">Daftar Barang Titipan Anda</h5>
+                <small class="text-muted">Pantau status, masa titip, dan sisa waktu barang secara transparan</small>
+            </div>
+            <form action="{{ route('penitip.barang.index') }}" method="GET" class="d-flex gap-2" novalidate>
+                <input type="text" name="q" class="form-control form-control-sm" placeholder="Cari nama barang..." value="{{ request('q') }}" style="width: 220px;">
+                <button class="btn btn-primary btn-sm px-3" type="submit">Cari</button>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
                     <tr>
-                        <td>{{ $barangs->firstItem() + $index }}</td>
-                        <td>
-                            <img src="{{ asset('images/barang/' . ($barang->fotoBarang->first()->nama_file ?? 'default.jpg')) }}" alt="Foto" class="img-thumbnail" style="width: 80px; cursor:pointer" data-bs-toggle="modal" data-bs-target="#modalDeskripsi{{ $barang->id_barang }}">
-                        </td>
-                        <td>{{ $barang->nama_barang }}</td>
-                        <td>
-                            @php
-                                $status = strtolower($barang->status_barang);
-                            @endphp
-                            <span class="status-btn
-                                {{ $status === 'tersedia' ? 'status-tersedia' : '' }}
-                                {{ $status === 'terjual' ? 'status-terjual' : '' }}
-                                {{ $status === 'didonasikan' ? 'status-didonasikan' : '' }}
-                                {{ $status === 'barang untuk donasi' ? 'status-donasi' : '' }}
-                                {{ $status === 'diambil kembali' ? 'status-terjual' : '' }}
-                                {{ $status === 'pengambilan diproses' ? 'status-terjual' : '' }}">
-                                {{ $status === 'barang untuk donasi' ? 'barang untuk donasi' : $barang->status_barang }}
-                            </span>
-                        </td>
-                        <td>{{ \Carbon\Carbon::parse($barang->tanggal_masuk)->locale('id')->isoFormat('D MMMM YYYY') }}</td>
-                        <td>
-                        {{ $barang->tanggal_keluar 
-                            ? \Carbon\Carbon::parse($barang->tanggal_keluar)->locale('id')->isoFormat('D MMMM YYYY') 
-                            : '-' 
-                        }}
-                        </td>
-                        <td>
-                            @if($barang->status_barang === 'Tersedia')
+                        <th class="text-center" style="width: 50px;">No</th>
+                        <th style="width: 90px;">Foto</th>
+                        <th>Nama Barang</th>
+                        <th>Status</th>
+                        <th>Tgl Masuk</th>
+                        <th>Tgl Keluar</th>
+                        <th>Sisa Waktu</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($barangs as $index => $barang)
+                        <tr>
+                            <td class="text-center text-muted small">{{ $barangs->firstItem() + $index }}</td>
+                            <td>
+                                <img src="{{ asset('images/barang/' . ($barang->fotoBarang->first()->nama_file ?? 'default.jpg')) }}" 
+                                     alt="Foto" 
+                                     class="rounded border" 
+                                     style="width: 70px; height: 70px; object-fit: cover; cursor:pointer" 
+                                     data-bs-toggle="modal" 
+                                     data-bs-target="#modalDeskripsi{{ $barang->id_barang }}">
+                            </td>
+                            <td>
+                                <strong class="text-dark">{{ $barang->nama_barang }}</strong>
+                                <div class="small text-muted">Rp{{ number_format($barang->harga_jual, 0, ',', '.') }}</div>
+                            </td>
+                            <td>
                                 @php
-                                    $tanggalAkhir = \Carbon\Carbon::parse($barang->tanggal_akhir);
-                                    $hariSekarang = now();
-
-                                    $sisaHari = round($hariSekarang->diffInDays($tanggalAkhir, false));
-                                    $hariLewat = round($hariSekarang->diffInDays($tanggalAkhir, false) * -1);
-                                    $batasAmbil = 7; 
+                                    $status = strtolower($barang->status_barang);
                                 @endphp
+                                <span class="badge-status
+                                    {{ $status === 'tersedia' ? 'badge-tersedia' : '' }}
+                                    {{ $status === 'terjual' ? 'badge-terjual' : '' }}
+                                    {{ $status === 'didonasikan' ? 'badge-didonasikan' : '' }}
+                                    {{ $status === 'barang untuk donasi' ? 'badge-didonasikan' : '' }}
+                                    {{ in_array($status, ['diambil kembali', 'pengambilan diproses']) ? 'badge-terjual' : '' }}">
+                                    {{ $barang->status_barang }}
+                                </span>
+                            </td>
+                            <td class="small">{{ \Carbon\Carbon::parse($barang->tanggal_masuk)->locale('id')->isoFormat('D MMM YYYY') }}</td>
+                            <td class="small">
+                            {{ $barang->tanggal_keluar 
+                                ? \Carbon\Carbon::parse($barang->tanggal_keluar)->locale('id')->isoFormat('D MMM YYYY') 
+                                : '-' 
+                            }}
+                            </td>
+                            <td>
+                                @if($barang->status_barang === 'Tersedia')
+                                    @php
+                                        $tanggalAkhir = \Carbon\Carbon::parse($barang->tanggal_akhir);
+                                        $hariSekarang = now();
 
-                                @if($sisaHari > 0)
-                                    <span class="badge bg-success">{{ $sisaHari }} hari tersisa</span>
-                                @elseif($sisaHari === 0)
-                                    <span class="badge bg-warning text-dark">Hari terakhir!</span>
-                                @elseif($hariLewat <= $batasAmbil)
-                                    <span class="badge bg-danger">Sisa {{ $batasAmbil - $hariLewat }} hari untuk Pengambilan</span>
+                                        $sisaHari = round($hariSekarang->diffInDays($tanggalAkhir, false));
+                                        $hariLewat = round($hariSekarang->diffInDays($tanggalAkhir, false) * -1);
+                                        $batasAmbil = 7; 
+                                    @endphp
+
+                                    @if($sisaHari > 0)
+                                        <span class="badge bg-success-subtle text-success-emphasis border">{{ $sisaHari }} hari tersisa</span>
+                                    @elseif($sisaHari === 0)
+                                        <span class="badge bg-warning-subtle text-warning-emphasis border">Hari terakhir!</span>
+                                    @elseif($hariLewat <= $batasAmbil)
+                                        <span class="badge bg-danger-subtle text-danger-emphasis border">Sisa {{ $batasAmbil - $hariLewat }} hari ambil</span>
+                                    @else
+                                        <span class="badge bg-danger text-white">Terlambat {{ $hariLewat }} hari</span>
+                                    @endif
                                 @else
-                                    <span class="badge bg-danger">Terlambat {{ $hariLewat }} hari</span>
+                                    <span class="text-muted">-</span>
                                 @endif
-                            @else
-                                -
-                            @endif
-                        </td>
+                            </td>
 
-                        <td>
-                            @if($barang->status_barang === 'Tersedia')
-                                {{-- Tombol Perpanjang --}}
-                                @if(!$barang->status_perpanjangan && $hariSekarang->isAfter($tanggalAkhir) || ($batasAmbil - $hariLewat == 7))
-                                    <form action="{{ route('penitip.perpanjang', $barang->id_barang) }}" method="POST" style="display:inline-block;">
-                                        @csrf
-                                        <button class="btn btn-sm btn-outline-primary">Perpanjang</button>
-                                    </form>
+                            <td class="text-center">
+                                @if($barang->status_barang === 'Tersedia')
+                                    @if(!$barang->status_perpanjangan && $hariSekarang->isAfter($tanggalAkhir) || ($batasAmbil - $hariLewat == 7))
+                                        <form action="{{ route('penitip.perpanjang', $barang->id_barang) }}" method="POST" class="d-inline-block" novalidate>
+                                            @csrf
+                                            <button class="btn btn-sm btn-outline-primary">Perpanjang</button>
+                                        </form>
+                                    @endif
+
+                                    @if($hariLewat >= 0 && $hariLewat <= $batasAmbil)
+                                        <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalAmbil{{ $barang->id_barang }}">
+                                            Ambil Barang
+                                        </button>
+
+                                        <!-- Modal Konfirmasi Ambil Barang -->
+                                        <div class="modal fade" id="modalAmbil{{ $barang->id_barang }}" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-success text-white">
+                                                        <h5 class="modal-title text-white">Konfirmasi Pengambilan Barang</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                                                    </div>
+                                                    <div class="modal-body p-4 text-center">
+                                                        <p class="mb-0">Apakah Anda yakin ingin mengambil barang <strong>{{ $barang->nama_barang }}</strong>?</p>
+                                                    </div>
+                                                    <div class="modal-footer border-top-0 pt-0 justify-content-center">
+                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                                        <form action="{{ route('penitip.ambil', $barang->id_barang) }}" method="POST" class="d-inline" novalidate>
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-success px-4">Ya, Ambil</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @elseif($barang->status_barang === 'Terjual')
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalDetail{{ $barang->id_barang }}">Detail</button>
                                 @endif
+                            </td>                               
+                        </tr>
 
-                                {{-- Tombol Ambil Barang saat window 7 hari --}}
-                                @if($hariLewat >= 0 && $hariLewat <= $batasAmbil)
-                                    <form action="{{ route('penitip.ambil', $barang->id_barang) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Ambil barang ini sekarang?')">
-                                        @csrf
-                                        <button class="btn btn-sm btn-outline-success">Ambil Barang</button>
-                                    </form>
-                                @endif
-                            @elseif($barang->status_barang === 'Terjual')
-                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalDetail{{ $barang->id_barang }}">Detail</button>
-                            @endif
-                        </td>                               
-                    </tr>
-
-                    <!-- Modal Deskripsi -->
-                    <div class="modal fade" id="modalDeskripsi{{ $barang->id_barang }}" tabindex="-1" aria-labelledby="deskripsiLabel{{ $barang->id_barang }}" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-light">
-                                    <h5 class="modal-title" id="deskripsiLabel{{ $barang->id_barang }}">Deskripsi Barang</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p><strong>Nama:</strong> {{ $barang->nama_barang }}</p>
-                                    <p><strong>Harga Jual:</strong> Rp{{ number_format($barang->harga_jual, 0, ',', '.') }}</p>
-                                    <p><strong>Deskripsi:</strong><br>{{ $barang->deskripsi }}</p>
+                        <!-- Modal Deskripsi -->
+                        <div class="modal fade" id="modalDeskripsi{{ $barang->id_barang }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Deskripsi Barang</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body p-4">
+                                        <h5 class="fw-bold mb-2">{{ $barang->nama_barang }}</h5>
+                                        <div class="fs-6 fw-bold mb-3" style="color: var(--brand-primary);">
+                                            Harga Jual: Rp{{ number_format($barang->harga_jual, 0, ',', '.') }}
+                                        </div>
+                                        <p class="text-muted small mb-0">{{ $barang->deskripsi }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Modal Detail -->
-                    <div class="modal fade" id="modalDetail{{ $barang->id_barang }}" tabindex="-1" aria-labelledby="modalLabel{{ $barang->id_barang }}" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-light">
-                                    <h5 class="modal-title" id="modalLabel{{ $barang->id_barang }}">Detail Penjualan</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p><strong>Nama:</strong> {{ $barang->nama_barang }}</p>
-                                    <p><strong>Harga Jual:</strong> Rp{{ number_format($barang->harga_jual, 0, ',', '.') }}</p>
+                        <!-- Modal Detail Penjualan -->
+                        <div class="modal fade" id="modalDetail{{ $barang->id_barang }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Detail Penjualan</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body p-4">
+                                        <p><strong>Nama:</strong> {{ $barang->nama_barang }}</p>
+                                        <p class="mb-0"><strong>Harga Jual:</strong> Rp{{ number_format($barang->harga_jual, 0, ',', '.') }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                @empty
-                    <tr>
-                        <td colspan="7" class="text-center">Tidak ada barang titipan ditemukan.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center p-5 text-muted">Tidak ada barang titipan ditemukan.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
-    <div class="d-flex justify-content-center mt-4">
-        {!! $barangs->withQueryString()->links('pagination::bootstrap-5') !!}
+        <div class="card-footer bg-white border-top-0 py-3 d-flex justify-content-center">
+            {!! $barangs->withQueryString()->links('pagination::bootstrap-5') !!}
+        </div>
     </div>
 </div>
 
+<!-- Modal Konfirmasi Logout -->
+<div class="modal fade" id="logoutConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title text-white">Konfirmasi Logout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body p-4 text-center">
+                <p class="mb-0">Apakah Anda yakin ingin keluar dari sesi akun ReUseMart?</p>
+            </div>
+            <div class="modal-footer border-top-0 pt-0 justify-content-center">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                <form action="{{ route('logout') }}" method="POST" class="d-inline" novalidate>
+                    @csrf
+                    <button type="submit" class="btn btn-danger px-4">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Unified Footer -->
 <footer>
     <div class="footer-container">
         <div class="footer-left">

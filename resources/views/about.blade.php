@@ -1,312 +1,213 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReUseMart - About Us</title>
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap 5 CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <!-- ReUseMart Unified Design System -->
+    <link rel="stylesheet" href="{{ asset('css/reusemart-theme.css') }}">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .about-container {
+            max-width: 1100px;
+            margin: 36px auto 60px auto;
+            padding: 0 24px;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            color: #333;
-            background-color: rgba(255, 255, 255, 0.8) !important;
-            backdrop-filter: saturate(150%) blur(30px);
-            z-index: 3;
-        }
-
-        .container {
-            padding: 0 20px;
+        .header-image {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: nowrap; /* agar tidak melipat */
+            justify-content: center;
+            margin-bottom: 36px;
         }
 
-        .logo {
-            margin-left: -40px;
-            background-color: rgba(111, 143, 70, 1); /* semi-transparan */
-            padding: 8px 12px;
-            border-radius: 50%;
+        .header-image img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-card);
         }
 
-        header {
-            background-color: rgba(111, 143, 70, 1);
-            padding: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            height: 80px; /* atur tinggi navbar */
-            box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        .about-card {
+            background-color: var(--bg-card);
+            padding: 32px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
         }
 
-        header .logo img {
-            height: 60px;
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2)); /* efek bayangan */
-            transition: transform 0.3s ease;
-            border-radius: 50%;
+        .about-card h2 {
+            font-size: 24px;
+            color: var(--text-heading);
+            margin-bottom: 14px;
+            position: relative;
+            display: inline-block;
         }
 
-        header .logo img:hover {
-            transform: scale(1.1); /* sedikit membesar saat di-hover */
-            filter: drop-shadow(6px 6px 12px rgba(0, 0, 0, 0.3));
-            cursor: pointer;
+        .about-card h2::after {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 3px;
+            background-color: var(--brand-primary);
+            border-radius: 9999px;
+            margin-top: 6px;
         }
 
-        nav ul {
-            display: flex;
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav ul li {
-            margin: 0 20px;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: white;
+        .about-card p {
             font-size: 15px;
-            font-weight: 600;
+            color: var(--text-body);
+            line-height: 1.7;
         }
 
-        .cart-search {
-            display: flex;
-            align-items: center;
+        .mission-list {
+            padding-left: 20px;
+            margin-top: 16px;
         }
 
-        .cart-search select,
-        .cart-search input[type="search"] {
-            width: 200px;
-            padding: 8px;
-            border-radius: 20px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-            outline: none;
-        }
-
-        .cart-search input[type="search"] {
-            width: 200px;
-        }
-
-        .cart-search a img {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-        }
-
-        .cart-search .icons {
-            display: flex;
-            align-items: center;
-        }
-
-        .cart-search .icons a {
-            margin-left: 15px;
-        }
-
-        .navbar-shadow-separator {
-            height: 1px;
-            background-color: #ccc;
-            box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.15);
-            margin-bottom: 5px;
-        }
-
-        /* Garis Pemisah di Bawah Carousel */
-        .carousel-divider {
-            width: 80%;
-            height: 1px; /* tebal garis */
-            background-color: rgba(111, 143, 70, 1);; /* warna garis */
-            margin: 20px auto; /* jarak dari carousel */
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* bayangan untuk garis */
-        }
-
-        footer {
-            background-color: #f4f4f4;
-            padding: 10px 50px;  
-            border-top: 1px solid rgba(111, 143, 70, 1);;
-            font-size: 14px;
-        }
-
-        .footer-container {
-            display: flex;
-            justify-content: space-between;  /* Menempatkan elemen di kiri dan kanan */
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;  
-        }
-
-        .footer-left p {
-            margin: 0;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        /* Footer Middle - Social Icons */
-        .footer-middle {
-            display: flex;
-            justify-content: right;
-            flex: 1;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .social-icon img {
-            width: 21px;
-            height: 21px;
-            transition: transform 0.3s;
-        }
-
-        .social-icon:hover img {
-            transform: scale(1.2);
-        }
-        
-        section {
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            font-size: 2rem;
-            color: #333;
-            text-align: center;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            color: #333;
-            margin-top: 20px;
-        }
-
-        p {
-            font-size: 14px;
-            color: #777;
+        .mission-list li {
+            font-size: 14.5px;
+            color: var(--text-heading);
+            margin-bottom: 14px;
             line-height: 1.6;
         }
 
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        ul li {
+        .mission-list li p {
             font-size: 14px;
-            color: #777;
-            margin: 5px 0;
+            color: var(--text-muted);
+            margin-top: 4px;
+            margin-bottom: 0;
         }
 
-        .mission, .team, .values {
-            margin-top: 30px;
+        .values-section-title {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 24px;
         }
 
-        .values ul {
-            padding-left: 20px;
+        .values-section-title::after {
+            margin: 6px auto 0 auto !important;
         }
 
-        /* Container untuk Menampilkan 3 Nilai per Baris */
-        .values-container {
+        .values-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);  /* Membuat 3 kolom */
-            gap: 20px;  /* Jarak antar nilai */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
             margin-top: 20px;
         }
 
-        /* Setiap Kotak Nilai */
         .value-box {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: var(--bg-page);
+            padding: 24px 20px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
             text-align: center;
-            height: 250px;  /* Menetapkan tinggi untuk setiap kotak nilai */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
         }
 
         .value-box:hover {
-            transform: scale(1.05);  /* Membesarkan kotak sedikit */
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);  /* Menambahkan bayangan lebih kuat saat hover */
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card-hover);
+            border-color: var(--border-hover);
+            background-color: #ffffff;
         }
 
-        /* Judul dari Setiap Nilai */
         .value-box h3 {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-heading);
             margin-bottom: 10px;
         }
 
-        /* Garis Bawah Setiap Judul */
         .value-box hr {
-            width: 60%;
-            margin: 0 auto;
-            border: 1px solid #28a745;  /* Garis hijau */
-            margin-bottom: 10px;
+            width: 40px;
+            margin: 0 auto 14px auto;
+            border: none;
+            height: 2px;
+            background-color: var(--brand-primary);
+            opacity: 1;
         }
 
-        /* Deskripsi dari Setiap Nilai */
         .value-box p {
-            font-size: 14px;
-            color: #777;
+            font-size: 13.5px;
+            color: var(--text-muted);
             line-height: 1.6;
-            text-align: justify;
-            margin-left: 10px;
-            margin-right: 10px;
+            text-align: center;
+            margin: 0;
         }
 
-        /* Responsive Design */
+        /* Contact Banner */
+        .contact-banner {
+            background: var(--brand-primary-gradient);
+            color: #ffffff;
+            padding: 48px 24px;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(111, 143, 70, 0.25);
+            text-align: center;
+        }
+
+        .contact-inner {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-banner h2 {
+            color: #ffffff !important;
+            font-size: 26px;
+            margin-bottom: 12px;
+        }
+
+        .contact-banner p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .contact-info-pills {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .contact-pill {
+            background-color: rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 8px 18px;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 992px) {
+            .values-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
-            .container {
-                flex-direction: row;
-                justify-content: space-between;
+            .values-grid {
+                grid-template-columns: 1fr;
             }
-
-            nav ul {
-                margin-top: 15px;
-                flex-direction: row;
-                align-items: center;
-                gap: 15px;
+            .header-image img {
+                height: 250px;
             }
-
-            nav ul li {
-                margin: 5px 0;
-            }
-
-            .cart-search input[type="search"] {
-                width: 150px;
-                display: none;
-            }
-
-            footer {
-                padding: 5px 40px;  
-            }
-
-            .footer-left p {
-                font-size: 10px;
-            }
-
-            .social-icon img {
-                width: 14px;
-                height: 14px;
-            }
-
-            .values-container {
-                grid-template-columns: 1fr;  /* 1 kolom per baris di ponsel */
+            .about-card {
+                padding: 20px;
             }
         }
     </style>
@@ -314,126 +215,133 @@
 <body>
     <!-- Header Section -->
     <header>
-        <div class="container">
-            <div class="logo">
-                <a href="{{ url('/') }}">
-                    <img src="{{ asset('images/logo2.png') }}" alt="Brand Logo">
-                </a>
+        <div class="header-container">
+            <div class="header-left">
+                <div class="logo">
+                    <a href="{{ url('/') }}">
+                        <img src="{{ asset('images/logo2.png') }}" alt="Brand Logo">
+                    </a>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="{{ url('/kategori') }}">Collection</a></li>
+                        <li><a href="{{ url('/about') }}">About Us</a></li>
+                    </ul>
+                </nav>
             </div>
-            <nav>
-                <ul>
-                    <li><a href="/kategori">Collection</a></li>
-                    <li><a href="/about">About Us</a></li>
-                </ul>
-            </nav>
-            <!-- Cart, Search, and Location -->
+            <!-- Cart & Account Icons -->
             <div class="cart-search">
-                <!-- Search Input -->
-                <!-- <input type="search" placeholder="Search for items..."> -->
-
                 <div class="icons">
-                    <a href="#"><img src="https://img.icons8.com/material/24/ffffff/shopping-cart.png" alt="Cart"></a>
-                    <a href="login"><img src="https://img.icons8.com/material/24/ffffff/user.png" alt="Account"></a>
+                    <a href="{{ route('keranjang') }}" title="Keranjang Belanja">
+                        <img src="https://img.icons8.com/material/24/ffffff/shopping-cart.png" alt="Cart">
+                    </a>
+                    <a href="{{ url('login') }}" title="Akun Pengguna">
+                        <img src="https://img.icons8.com/material/24/ffffff/user.png" alt="Account">
+                    </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="navbar-shadow-separator"></div>
-    
     <!-- Main Section -->
     <main>
-        <div class="about-us" style="font-family: Arial, sans-serif; padding: 20px; max-width: 1000px; margin: 0 auto;">
-
-            <!-- Gambar Header -->
-            <div class="header-image" style="display: flex; justify-content: center; margin-bottom: 20px;">
-                <img src="{{ asset('images/barang/reusemart.jpg') }}" alt="ReUseMart Banner" style="width: 80%; max-width: 1100px; height: 400px; object-fit: cover; border-radius: 10px;">
+        <div class="about-container">
+            <!-- Gambar Header Banner -->
+            <div class="header-image">
+                <img src="{{ asset('images/barang/reusemart.jpg') }}" alt="ReUseMart Banner">
             </div>
 
-            <!-- Kotak-kotak Penjelasan -->
-            <div style="display: grid; gap: 20px;">
+            <!-- Visi Card -->
+            <div class="about-card">
+                <h2>Visi</h2>
+                <p><strong>ReUseMart</strong> menjadi platform e-commerce terkemuka yang mendorong keberlanjutan dan pengurangan sampah dengan menyediakan tempat untuk membeli dan menjual barang bekas berkualitas tinggi.</p>
+            </div>
 
-                <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-                    <h2><strong>Visi</strong></h2>
-                    <p><strong>ReUseMart</strong> menjadi platform e-commerce terkemuka yang mendorong keberlanjutan dan pengurangan sampah dengan menyediakan tempat untuk membeli dan menjual barang bekas berkualitas tinggi.</p>
+            <!-- Misi Card -->
+            <div class="about-card">
+                <h2>Misi</h2>
+                <p><strong>ReUseMart</strong> hadir dengan tujuan menciptakan pasar berkelanjutan yang memudahkan orang untuk membeli dan menjual barang bekas. Kami ingin mengurangi limbah dan mendorong gaya hidup ramah lingkungan.</p>
+                <ol class="mission-list">
+                    <li>
+                        <strong>Meningkatkan Aksesibilitas untuk Barang Bekas Berkualitas:</strong>
+                        <p>Memberikan pengalaman berbelanja yang mudah, nyaman, dan terpercaya bagi konsumen yang mencari barang bekas berkualitas.</p>
+                    </li>
+                    <li>
+                        <strong>Mendorong Keberlanjutan:</strong>
+                        <p>Mengurangi limbah dengan memberikan barang bekas kesempatan kedua untuk dipakai oleh orang lain, sehingga mendukung prinsip ekonomi sirkular dan keberlanjutan.</p>
+                    </li>
+                    <li>
+                        <strong>Menyediakan Pilihan yang Beragam:</strong>
+                        <p>Menawarkan berbagai kategori produk bekas yang terjamin kualitasnya, mulai dari elektronik, pakaian, perabotan rumah tangga, hingga barang koleksi.</p>
+                    </li>
+                    <li>
+                        <strong>Memberdayakan Komunitas:</strong>
+                        <p>Membantu individu dan komunitas untuk mendapatkan akses ke barang bekas dengan harga terjangkau serta memberikan mereka kesempatan untuk menjual barang yang tidak lagi mereka butuhkan.</p>
+                    </li>
+                    <li>
+                        <strong>Edukasi dan Kesadaran Konsumen:</strong>
+                        <p>Meningkatkan kesadaran masyarakat mengenai pentingnya membeli barang bekas untuk mendukung keberlanjutan dan pengurangan limbah.</p>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Values Card -->
+            <div class="about-card">
+                <div class="text-center">
+                    <h2 class="values-section-title">Our Values</h2>
                 </div>
 
-                <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-                    <h2><strong>Misi</strong></h2>
-                    <p><strong>ReUseMart</strong> hadir dengan tujuan menciptakan pasar berkelanjutan yang memudahkan orang untuk membeli dan menjual barang bekas. Kami ingin mengurangi limbah dan mendorong gaya hidup ramah lingkungan.</p>
-                    <ol>
-                        <li><strong>Meningkatkan Aksesibilitas untuk Barang Bekas Berkualitas:</strong>
-                            <p style="margin-bottom: 0";>Memberikan pengalaman berbelanja yang mudah, nyaman, dan terpercaya bagi konsumen yang mencari barang bekas berkualitas.</p>
-                        </li>
-                        <li><strong>Mendorong Keberlanjutan:</strong>
-                            <p style="margin-bottom: 0">Mengurangi limbah dengan memberikan barang bekas kesempatan kedua untuk dipakai oleh orang lain, sehingga mendukung prinsip ekonomi sirkular dan keberlanjutan.</p>
-                        </li>
-                        <li><strong>Menyediakan Pilihan yang Beragam:</strong>
-                            <p style="margin-bottom: 0">Menawarkan berbagai kategori produk bekas yang terjamin kualitasnya, mulai dari elektronik, pakaian, perabotan rumah tangga, hingga barang koleksi.</p>
-                        </li>
-                        <li><strong>Memberdayakan Komunitas:</strong>
-                            <p style="margin-bottom: 0">Membantu individu dan komunitas untuk mendapatkan akses ke barang bekas dengan harga terjangkau serta memberikan mereka kesempatan untuk menjual barang yang tidak lagi mereka butuhkan.</p>
-                        </li>
-                        <li><strong>Edukasi dan Kesadaran Konsumen:</strong>
-                            <p style="margin-bottom: 0">Meningkatkan kesadaran masyarakat mengenai pentingnya membeli barang bekas untuk mendukung keberlanjutan dan pengurangan limbah.</p>
-                        </li>
-                    </ol>
-                </div>
-
-                <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-                    <h2 style="text-align: center;"><strong>Our Values</strong></h2>
-
-                    <div class="values-container">
-                        <div class="value-box">
-                            <h3>Keberlanjutan</h3>
-                            <hr>
-                            <p>ReUseMart berkomitmen untuk mengurangi dampak lingkungan melalui perdagangan barang bekas yang masih berkualitas, mendukung pengurangan sampah dan penggunaan ulang sumber daya.</p>
-                        </div>
-
-                        <div class="value-box">
-                            <h3>Kualitas</h3>
-                            <hr>
-                            <p>Meskipun barang yang dijual adalah barang bekas, kami memastikan bahwa setiap produk yang tersedia di platform kami telah melalui pemeriksaan kualitas yang ketat agar hanya barang berkualitas tinggi yang bisa ditemukan oleh pembeli.</p>
-                        </div>
-
-                        <div class="value-box">
-                            <h3>Transparansi</h3>
-                            <hr>
-                            <p>Kami percaya bahwa kepercayaan adalah dasar dari hubungan jangka panjang dengan pelanggan dan penjual. Oleh karena itu, kami selalu memastikan bahwa deskripsi barang dan proses transaksi dilakukan secara terbuka dan jelas.</p>
-                        </div>
+                <div class="values-grid">
+                    <div class="value-box">
+                        <h3>Keberlanjutan</h3>
+                        <hr>
+                        <p>ReUseMart berkomitmen untuk mengurangi dampak lingkungan melalui perdagangan barang bekas yang masih berkualitas, mendukung pengurangan sampah dan penggunaan ulang sumber daya.</p>
                     </div>
 
-                    <div class="values-container">
-                        <div class="value-box">
-                            <h3>Inovasi</h3>
-                            <hr>
-                            <p>Kami terus berinovasi untuk menciptakan platform yang lebih baik, mempermudah proses transaksi, serta meningkatkan pengalaman pelanggan dan penjual di ReUseMart.</p>
-                        </div>
+                    <div class="value-box">
+                        <h3>Kualitas</h3>
+                        <hr>
+                        <p>Meskipun barang yang dijual adalah barang bekas, kami memastikan bahwa setiap produk yang tersedia di platform kami telah melalui pemeriksaan kualitas yang ketat agar hanya barang berkualitas tinggi yang bisa ditemukan oleh pembeli.</p>
+                    </div>
 
-                        <div class="value-box">
-                            <h3>Kehidupan yang Lebih Baik</h3>
-                            <hr>
-                            <p>Dengan menawarkan akses kepada barang-barang bekas berkualitas, kami membantu masyarakat mendapatkan barang yang mereka butuhkan dengan harga terjangkau sambil mendukung keberlanjutan dan kehidupan yang lebih baik.</p>
-                        </div>
+                    <div class="value-box">
+                        <h3>Transparansi</h3>
+                        <hr>
+                        <p>Kami percaya bahwa kepercayaan adalah dasar dari hubungan jangka panjang dengan pelanggan dan penjual. Oleh karena itu, kami selalu memastikan bahwa deskripsi barang dan proses transaksi dilakukan secara terbuka dan jelas.</p>
+                    </div>
 
-                        <div class="value-box">
-                            <h3>Komunitas</h3>
-                            <hr>
-                            <p>Kami mengutamakan pemberdayaan komunitas untuk menciptakan ekosistem yang inklusif, yang dapat menghubungkan pembeli dan penjual untuk berbagi barang yang masih berguna dan mengurangi pemborosan.</p>
-                        </div>
+                    <div class="value-box">
+                        <h3>Inovasi</h3>
+                        <hr>
+                        <p>Kami terus berinovasi untuk menciptakan platform yang lebih baik, mempermudah proses transaksi, serta meningkatkan pengalaman pelanggan dan penjual di ReUseMart.</p>
+                    </div>
+
+                    <div class="value-box">
+                        <h3>Kehidupan yang Lebih Baik</h3>
+                        <hr>
+                        <p>Dengan menawarkan akses kepada barang-barang bekas berkualitas, kami membantu masyarakat mendapatkan barang yang mereka butuhkan dengan harga terjangkau sambil mendukung keberlanjutan dan kehidupan yang lebih baik.</p>
+                    </div>
+
+                    <div class="value-box">
+                        <h3>Komunitas</h3>
+                        <hr>
+                        <p>Kami mengutamakan pemberdayaan komunitas untuk menciptakan ekosistem yang inklusif, yang dapat menghubungkan pembeli dan penjual untuk berbagi barang yang masih berguna dan mengurangi pemborosan.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div style="background: rgba(111, 143, 70, 1); height: 200px; padding: 40px 50px; border-radius: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.2); width: 100%; margin-bottom: 0px;">
-            <h2 style="color: white; margin-bottom: 10px;"><strong>
-                <span style="border-bottom: 2px solid white; padding-bottom: 5px; display: inline-block; width: 150px;">Our Contact</span>
-            </h2></strong>
-            <p style="margin-bottom: 0px; color: white;">Jika Anda memiliki pertanyaan atau ingin tahu lebih banyak tentang ReUseMart, silakan hubungi kami:</p>
-            <p style="margin-bottom: 0px; color: white;">Email:</> support@reusemart.com</p>
-            <p style="margin-bottom: 0px; color: white;">Telepon:+1 (123) 456-7890</p>
-        </div>
+        <!-- Contact Banner -->
+        <section class="contact-banner">
+            <div class="contact-inner">
+                <h2>Our Contact</h2>
+                <p>Jika Anda memiliki pertanyaan atau ingin tahu lebih banyak tentang ReUseMart, silakan hubungi kami:</p>
+                <div class="contact-info-pills">
+                    <span class="contact-pill"><i class="bi bi-envelope"></i> support@reusemart.com</span>
+                    <span class="contact-pill"><i class="bi bi-telephone"></i> +1 (123) 456-7890</span>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer Section -->
@@ -444,17 +352,17 @@
             </div>
             <div class="footer-middle">
                 <div class="social-icons">
-                    <a href="#" class="social-icon"><img src="https://img.icons8.com/material/24/000000/facebook.png" alt="Facebook"></a>
-                    <a href="#" class="social-icon"><img src="https://img.icons8.com/material/24/000000/twitter.png" alt="Twitter"></a>
-                    <a href="#" class="social-icon"><img src="https://img.icons8.com/material/24/000000/instagram.png" alt="Instagram"></a>
-                    <a href="#" class="social-icon"><img src="https://img.icons8.com/material/24/000000/pinterest.png" alt="Pinterest"></a>
-                    <a href="#" class="social-icon"><img src="https://img.icons8.com/material/24/000000/youtube.png" alt="YouTube"></a>
+                    <a href="#" class="social-icon" aria-label="Facebook"><img src="https://img.icons8.com/material/24/000000/facebook.png" alt="Facebook"></a>
+                    <a href="#" class="social-icon" aria-label="Twitter"><img src="https://img.icons8.com/material/24/000000/twitter.png" alt="Twitter"></a>
+                    <a href="#" class="social-icon" aria-label="Instagram"><img src="https://img.icons8.com/material/24/000000/instagram.png" alt="Instagram"></a>
+                    <a href="#" class="social-icon" aria-label="Pinterest"><img src="https://img.icons8.com/material/24/000000/pinterest.png" alt="Pinterest"></a>
+                    <a href="#" class="social-icon" aria-label="YouTube"><img src="https://img.icons8.com/material/24/000000/youtube.png" alt="YouTube"></a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS and dependencies (Popper.js and Bootstrap JS) -->
+    <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 </body>

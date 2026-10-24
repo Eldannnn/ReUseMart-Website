@@ -1,33 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
+@extends('Admin.dashboard')
 
-    <div class="min-h-screen flex items-center justify-center">
-        <div class="bg-white p-6 rounded-lg shadow-lg max-w-4xl w-full">
-            <h1 class="text-3xl font-bold text-center mb-6">Welcome to the Dashboard Admin</h1>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-blue-500 p-4 rounded-lg text-white text-center">
-                    <h2 class="text-xl">Statistik 1</h2>
-                    <p>100</p>
+@section('isi')
+<div class="container-fluid px-2">
+    <div class="mb-4">
+        <h3 class="fw-bold mb-1" style="color: var(--text-heading);">Dashboard Administrator</h3>
+        <p class="text-muted small mb-0">Selamat datang di panel kendali ReUseMart. Pantau dan kelola seluruh aktivitas operasional.</p>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-buildings"></i>
                 </div>
-                <div class="bg-green-500 p-4 rounded-lg text-white text-center">
-                    <h2 class="text-xl">Statistik 2</h2>
-                    <p>200</p>
+                <div>
+                    <div class="stat-label">Organisasi Terdaftar</div>
+                    <div class="stat-value">100</div>
                 </div>
-                <div class="bg-red-500 p-4 rounded-lg text-white text-center">
-                    <h2 class="text-xl">Statistik 3</h2>
-                    <p>300</p>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <div>
+                    <div class="stat-label">Total Pegawai</div>
+                    <div class="stat-value">200</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-trophy"></i>
+                </div>
+                <div>
+                    <div class="stat-label">Aktivitas Penjualan</div>
+                    <div class="stat-value">300</div>
                 </div>
             </div>
         </div>
     </div>
 
-</body>
-</html>
+    <div class="card border-0 shadow-sm p-4 text-center" style="border: 1px solid var(--border-color) !important; border-radius: var(--radius-md);">
+        <div class="py-4">
+            <div class="mb-3">
+                <i class="bi bi-shield-check" style="font-size: 3rem; color: var(--brand-primary);"></i>
+            </div>
+            <h5 class="fw-bold mb-2" style="color: var(--text-heading);">Panel Administrasi ReUseMart</h5>
+            <p class="text-muted small mx-auto mb-3" style="max-width: 500px;">
+                Gunakan menu sidebar di sebelah kiri untuk mengelola master data Organisasi, Pegawai internal, serta penentuan Top Seller bulanan.
+            </p>
+            <div class="d-inline-flex gap-2">
+                <a href="{{ url('organisasi') }}" class="btn btn-outline-primary">
+                    <i class="bi bi-buildings me-1"></i> Data Organisasi
+                </a>
+                <a href="{{ url('pegawai') }}" class="btn btn-primary">
+                    <i class="bi bi-person-badge me-1"></i> Data Pegawai
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

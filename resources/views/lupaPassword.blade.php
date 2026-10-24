@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Reset Password</title>
+  <title>Reset Password - ReUseMart</title>
 
-  <link rel="preconnect" href="https://fonts.bunny.net">
-  <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-        crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('css/reusemart-theme.css') }}">
   <style>
     body {
-      font-family: 'Figtree', Arial, Helvetica, sans-serif;
+      font-family: var(--font-family) !important;
       margin: 0;
       overflow: hidden;
     }
@@ -22,6 +21,8 @@
       width: 100%;
       min-height: 100vh;
       overflow: hidden;
+      display: flex;
+      align-items: center;
     }
     .video-background {
       position: absolute;
@@ -39,26 +40,25 @@
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background-color: rgba(111, 143, 70, 0.8);
+      background: linear-gradient(135deg, rgba(74, 97, 45, 0.75), rgba(111, 143, 70, 0.65));
       z-index: 2;
     }
     .bg-glass {
-      background-color: rgba(255, 255, 255, 0.85) !important;
-      backdrop-filter: saturate(150%) blur(30px);
+      background-color: rgba(255, 255, 255, 0.92) !important;
+      backdrop-filter: saturate(180%) blur(24px);
+      -webkit-backdrop-filter: saturate(180%) blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.25);
       z-index: 3;
     }
     .content {
       position: relative;
       z-index: 4;
-      color: #333;
-      text-align: center;
-    }
-    .form-control, .form-label {
-      color: #333;
     }
   </style>
 </head>
-<body>
+<body class="antialiased">
 
 <section class="background-animation">
   <video class="video-background" autoplay loop muted>
@@ -67,16 +67,23 @@
   </video>
   <div class="bg-overlay"></div>
 
-  <div class="container px-4 py-5 text-center content">
+  <div class="container px-4 py-5 content">
     <div class="row justify-content-center">
-      <div class="col-lg-6">
-        <h1 class="my-4 display-5 fw-bold text-white">Reset Password</h1>
-        <div class="card bg-glass">
-          <div class="card-body p-4">
-            <form action="{{ route('password.ubah') }}" method="POST">
+      <div class="col-lg-5 col-md-8">
+        <div class="card bg-glass border-0">
+          <div class="card-body p-4 p-md-5">
+            <div class="text-start mb-4">
+              <span class="badge bg-white text-dark px-3 py-2 rounded-pill fw-semibold mb-2 shadow-sm" style="color: var(--brand-primary) !important;">
+                Keamanan Akun
+              </span>
+              <h3 class="fw-bold mt-2 mb-1 text-dark">Reset Password</h3>
+              <p class="text-muted small">Atur ulang kata sandi akun ReUseMart Anda</p>
+            </div>
+
+            <form action="{{ route('password.ubah') }}" method="POST" novalidate id="resetPasswordForm">
               @csrf
-                <div class="form-floating mb-4">
-                    <select name="tipe_user" class="form-select" id="floatingTipeUser" required>
+                <div class="form-floating mb-3">
+                    <select name="tipe_user" class="form-select" id="floatingTipeUser">
                         <option value="" selected disabled>Pilih Tipe Pengguna</option>
                         <option value="pembeli">Pembeli</option>
                         <option value="penitip">Penitip</option>
@@ -90,9 +97,8 @@
                           name="email"
                           class="form-control"
                           id="floatingEmail"
-                          placeholder="name@example.com"
-                          required>
-                    <label for="floatingEmail">Alamat Email</label>
+                          placeholder="name@example.com">
+                    <label for="floatingEmail">Alamat Email Terdaftar</label>
                 </div>
 
                 <div class="form-floating mb-3">
@@ -100,14 +106,13 @@
                           name="password"
                           class="form-control"
                           id="floatingPassword"
-                          placeholder="Password Baru"
-                          required>
-                    <label for="floatingPassword">Password Baru</label>
+                          placeholder="Password Baru">
+                    <label for="floatingPassword">Kata Sandi Baru</label>
                 </div>
 
                 @if ($errors->any())
-                <div class="alert alert-danger">
-                  <ul>
+                <div class="alert alert-danger py-2 px-3 small rounded-3 mb-3">
+                  <ul class="mb-0 ps-3">
                   @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                   @endforeach
@@ -116,9 +121,13 @@
                 @endif
 
                 <button type="submit"
-                        class="btn btn-dark w-100 mb-2">
-                    Ganti Password
+                        class="btn btn-primary w-100 py-2 fs-6 mb-3 shadow-sm">
+                    Simpan Password Baru
                 </button>
+
+                <div class="text-center">
+                  <a href="{{ url('login') }}" class="small fw-semibold text-muted text-decoration-none">← Kembali ke Halaman Login</a>
+                </div>
             </form>
           </div>
         </div>
@@ -127,8 +136,6 @@
   </div>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kwDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
