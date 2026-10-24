@@ -1,4 +1,4 @@
-APP_NAME="ReUseMart
+APP_NAME="ReUseMart"
 APP_ENV=production
 APP_KEY=base64:f2mWuFwLTuqOCaqhQ0BKyY66WhDndQNBGSItta+355Q=
 APP_DEBUG=false

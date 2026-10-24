@@ -23,7 +23,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::share('daftarOrganisasi', Organisasi::all());
+        View::composer('*', function ($view) {
+            try {
+                if (\Illuminate\Support\Facades\Schema::hasTable('organisasi')) {
+                    $view->with('daftarOrganisasi', Organisasi::all());
+                } else {
+                    $view->with('daftarOrganisasi', collect());
+                }
+            } catch (\Throwable $e) {
+                $view->with('daftarOrganisasi', collect());
+            }
+        });
         Paginator::useBootstrapFive();
 
         Route::prefix('api')
