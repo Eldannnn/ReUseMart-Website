@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Nota Penjualan</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+
     <style>
         body {
             font-family: Arial, sans-serif;

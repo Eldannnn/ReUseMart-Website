@@ -30,7 +30,6 @@
 - **Backend Framework:** Laravel 11 (PHP 8.2+)
 - **Database Engine:** MySQL / TiDB Cloud
 - **Frontend & Styling:** Bootstrap 5.3, Blade Templating, Google Fonts (Plus Jakarta Sans)
-- **Desain UI/UX:** Sistem tema terpusat (`public/css/reusemart-theme.css`) dengan warna identitas ReUseMart (Olive Green `#6f8f46`)
 - **Pencetakan Dokumen:** DomPDF / Barryvdh Laravel-DOMPDF untuk nota transaksi dan laporan resmi
 
 ---
