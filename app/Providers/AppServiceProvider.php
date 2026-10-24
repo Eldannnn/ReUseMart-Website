@@ -7,6 +7,7 @@ use App\Models\Organisasi;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->environment('production') || request()->header('X-Forwarded-Proto') === 'https' || env('APP_ENV') === 'production') {
+            URL::forceScheme('https');
+        }
+
         View::composer('*', function ($view) {
             try {
                 if (\Illuminate\Support\Facades\Schema::hasTable('organisasi')) {
